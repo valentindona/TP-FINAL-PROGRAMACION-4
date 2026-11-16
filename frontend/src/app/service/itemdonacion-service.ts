@@ -18,8 +18,8 @@ export class ItemdonacionService {
                 next: (data) => {
                     this.items.set(data)
                 },
-                error: (error) => {
-                    this.error.set('Error al cargar los items ' + error)
+                error: () => {
+                    this.error.set('No se pudieron cargar los ítems de donación.')
                 }
             }
         )

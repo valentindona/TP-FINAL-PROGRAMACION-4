@@ -14,7 +14,7 @@ export class RemitoEdit implements OnInit {
   ngOnInit(): void {
     this.institucionService.obtenerInstituciones().subscribe({
       next: instituciones => this.instituciones = instituciones,
-      error: error => this.remitoService.error.set('No se pudieron cargar las instituciones: ' + error.message)
+      error: () => this.remitoService.error.set('No se pudieron cargar las instituciones.')
     });
     const r = this.remitoService.remitoByID();
     if(r){

@@ -30,7 +30,7 @@ export class Historial {
     const id = Number(this.route.snapshot.paramMap.get('id'));
     this.auditoriaService.getHistorial(this.entidad, id).subscribe({
       next: data => this.revisiones.set(data),
-      error: err => this.error.set('No se pudo cargar el historial (error ' + err.status + ')'),
+      error: () => this.error.set('No se pudo cargar el historial. Intentá de nuevo.'),
     });
   }
 }

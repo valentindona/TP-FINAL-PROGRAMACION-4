@@ -84,7 +84,7 @@ export class RemitoService {
 
     add(remito: RemitoRequest){
         this.crearRemito(remito).subscribe({
-            error: error => this.error.set("No se pudo agregar el remito: " + error)
+            error: () => this.error.set("No se pudo agregar el remito")
         });
     }
 

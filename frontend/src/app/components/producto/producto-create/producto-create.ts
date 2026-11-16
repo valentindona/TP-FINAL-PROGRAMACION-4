@@ -38,7 +38,7 @@ export class ProductoCreate {
 
     this.productoService.crearProducto(p).subscribe({
       next: () => this.formulario.reset(),
-      error: error => this.productoService.error.set('Error al crear el producto: ' + error.message)
+      error: () => this.productoService.error.set('No se pudo crear el producto. Revisá los datos e intentá de nuevo.')
     });
   }
 }

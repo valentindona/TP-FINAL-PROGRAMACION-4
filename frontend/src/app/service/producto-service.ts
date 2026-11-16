@@ -24,8 +24,8 @@ export class ProductoService {
                 next: (data) => {
                     this.productos.set(data)
                 },
-                error: (error) =>{
-                    this.error.set("No se pudieron cargar los productos " + error)
+                error: () => {
+                    this.error.set("No se pudieron cargar los productos")
                 }
             }
         )
@@ -71,7 +71,7 @@ export class ProductoService {
 
     add(producto: ProductoRequest){
         this.crearProducto(producto).subscribe({
-            error: error => this.error.set("Error al cargar un producto " + error)
+            error: () => this.error.set("No se pudo cargar el producto. Intentá de nuevo.")
         });
     }
 

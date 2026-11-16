@@ -83,10 +83,13 @@ ngOnInit(): void {
     this.remitoservice.crearRemito(r).subscribe({
       next: () => {
         this.formulario.reset({ fecha: '', idInstitucion: '' });
-        this.items.clear();
-        this.items.push(this.crearDetalle());
+        while (this.items.length > 1) {
+          this.items.removeAt(1);
+        }
+        this.items.at(0).reset({ idItemDonacion: '', cantidad: 1 });
       },
-      error: error => this.remitoservice.error.set('No se pudo crear el remito: ' + error.message)
+      // El interceptor global muestra el aviso con el mensaje del backend.
+      error: () => {}
     });
 }
 }
