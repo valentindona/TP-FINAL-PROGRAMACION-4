@@ -1,5 +1,5 @@
 <div class="site-header">
-    <a class="brand" routerLink="/home" aria-label="Banco de Alimentos · Gestor Global Solidario">
+    <a class="brand" routerLink="/" aria-label="Ir al inicio · Banco de Alimentos · Gestor Global Solidario">
         <span class="brand-logo">
             <img src="logo-banco.png" alt="Banco de Alimentos" width="121" height="34">
         </span>
@@ -7,7 +7,7 @@
     </a>
     @if (auth.isLoggedIn()) {
         <div class="session">
-            <a class="session-link" routerLink="/home">Inicio</a>
+            <a class="session-link" routerLink="/home">Panel</a>
             <span class="session-user">
                 <span class="avatar" aria-hidden="true">{{ auth.username()?.charAt(0) }}</span>
                 <span class="session-meta">
