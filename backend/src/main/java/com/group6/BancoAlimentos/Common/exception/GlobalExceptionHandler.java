@@ -1,6 +1,7 @@
 package com.group6.BancoAlimentos.Common.exception;
 
 import com.group6.BancoAlimentos.Features.Donantes.expections.CuitDuplicadoExpections;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -61,5 +63,19 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(CuitDuplicadoExpections.class)
     public ResponseEntity<String> manejarCuitDuplicado(CuitDuplicadoExpections ex){
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErrorReglaNegocioDTO> manejarIntegridadDeDatos(DataIntegrityViolationException ex){
+        // La base rechaza el cambio porque otro registro lo referencia (por ejemplo,
+        // una empresa que ya tiene donaciones). Devolvemos un mensaje legible en lugar
+        // de un 500 con el detalle tecnico de la restriccion.
+        ErrorReglaNegocioDTO error = new ErrorReglaNegocioDTO(
+                "No se puede completar la operación porque el registro tiene datos asociados.",
+                "DATOS_ASOCIADOS",
+                LocalDateTime.now()
+        );
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
     }
 }

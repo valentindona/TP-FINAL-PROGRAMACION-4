@@ -2,6 +2,7 @@ package com.group6.BancoAlimentos.Features.Donantes.service;
 
 import com.group6.BancoAlimentos.Common.dto.RevisionDTO;
 import com.group6.BancoAlimentos.Common.exception.RecursoNoEncontradoException;
+import com.group6.BancoAlimentos.Common.exception.ReglaNegocioException;
 import com.group6.BancoAlimentos.Features.Donantes.DTO.DonanteRequestDTO;
 import com.group6.BancoAlimentos.Features.Donantes.DTO.DonanteResponseDTO;
 import com.group6.BancoAlimentos.Features.Donantes.expections.CuitDuplicadoExpections;
@@ -79,6 +80,13 @@ public class DonanteService implements IDonanteService{
     public void delete(Long id) {
         Donante donante=donanteRepository.findById(id).
                 orElseThrow(()->new RuntimeException("Donante no existado"));
+
+        if (donante.getDonaciones() != null && !donante.getDonaciones().isEmpty()) {
+            throw new ReglaNegocioException(
+                    "No se puede eliminar la empresa porque tiene donaciones registradas.",
+                    "DONANTE_CON_DONACIONES"
+            );
+        }
 
         donanteRepository.delete(donante);
     }
