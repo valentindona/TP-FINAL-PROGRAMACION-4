@@ -100,8 +100,9 @@ export class RemitoService {
     });
 }
 remove(id: number){
-    this.http.delete<void>(
-        this.url + '/' + id
+    this.http.delete(
+        this.url + '/' + id,
+        { responseType: 'text' }
     ).subscribe({
         next: () => {
             this.listRemitos();

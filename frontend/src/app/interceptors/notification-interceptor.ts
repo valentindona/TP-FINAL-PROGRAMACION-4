@@ -84,24 +84,39 @@ function successMessage(url: string, method: string, copy: ActionCopy): string {
     return copy.updated;
 }
 
-function backendMessage(error: HttpErrorResponse): string | null {
-    const body = error.error;
-
+function readMessage(body: unknown): string | null {
     if (typeof body === 'string') {
         const text = body.trim();
-        return text && text.length <= 220 ? text : null;
+        if (!text) return null;
+
+        // Algunos endpoints devuelven JSON con content-type de texto.
+        if (text.startsWith('{') || text.startsWith('[')) {
+            try {
+                return readMessage(JSON.parse(text));
+            } catch {
+                // Era texto plano que empieza con llave: seguimos con el texto.
+            }
+        }
+
+        return text.length <= 220 ? text : null;
     }
 
-    if (body && typeof body === 'object') {
-        for (const key of ['mensaje', 'message', 'detail']) {
-            const value = (body as Record<string, unknown>)[key];
-            if (typeof value === 'string' && value.trim() && value.length <= 220) {
-                return value.trim();
-            }
+    // Los errores de parseo de Angular no son mensajes del backend.
+    if (!body || typeof body !== 'object' || body instanceof Error) return null;
+
+    for (const key of ['mensaje', 'message', 'detail']) {
+        const value = (body as Record<string, unknown>)[key];
+        if (typeof value === 'string') {
+            const message = readMessage(value);
+            if (message) return message;
         }
     }
 
     return null;
+}
+
+function backendMessage(error: HttpErrorResponse): string | null {
+    return readMessage(error.error);
 }
 
 function failureMessage(error: HttpErrorResponse, method: string, copy: ActionCopy): string {

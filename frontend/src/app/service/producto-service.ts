@@ -85,7 +85,7 @@ export class ProductoService {
     }
 
     remove(id: number){
-        this.http.delete(this.url + '/' + id).subscribe(
+        this.http.delete(this.url + '/' + id, { responseType: 'text' }).subscribe(
             {
                 next: () => {
                     this.listProductos()

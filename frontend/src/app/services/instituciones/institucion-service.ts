@@ -41,7 +41,7 @@ export class InstitucionService {
     }
 
     eliminarInstitucion( id : string){
-        return this.http.delete<Institucion>(`${this.url}/${id}`)
+        return this.http.delete(`${this.url}/${id}`, { responseType: 'text' })
     }
 
     editarInstitucion( institucion : Institucion){

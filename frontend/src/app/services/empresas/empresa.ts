@@ -43,7 +43,7 @@ export class EmpresaService{
     }
 
     eliminarEmpresa(id : string){
-        return this.http.delete<string>(`${this.url}/${id}`);
+        return this.http.delete(`${this.url}/${id}`, { responseType: 'text' });
     }
     
     editarEmpresa(empresa : Empresa){
