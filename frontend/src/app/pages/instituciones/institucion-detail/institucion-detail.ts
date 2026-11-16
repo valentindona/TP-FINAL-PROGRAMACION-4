@@ -3,6 +3,8 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Institucion } from '../../../models/institucion';
 import { InstitucionService } from '../../../services/instituciones/institucion-service';
 import { AuthService } from '../../../service/auth-service';
+import { NotificationService } from '../../../service/notification-service';
+import { ConfirmService } from '../../../service/confirm-service';
 
 @Component({
   imports: [RouterLink],
@@ -17,6 +19,9 @@ export class InstitucionDetail implements OnInit {
   readonly puedeVerAuditoria = this.auth.hasAuthority('AUDITORIA_INSTITUCION_VER');
   institucion ?: Institucion;
   id ?: string;
+
+  private notifications = inject(NotificationService);
+  private confirmDialog = inject(ConfirmService);
 
   constructor(
     private institucionService : InstitucionService,
@@ -37,23 +42,27 @@ export class InstitucionDetail implements OnInit {
         },
         error : (e) => {
           console.log(e);
-          alert('Error al buscar detalles de la institución.');
+          this.notifications.error('No se pudieron cargar los detalles de la institución.');
         }
       });
     }
   }
 
-  deleteInstitucion(){
-    if(!confirm('¿Desea eliminar la institución?')) return; 
+  async deleteInstitucion(){
+    const confirmado = await this.confirmDialog.ask({
+      title: 'Eliminar institución',
+      message: 'Se va a eliminar esta institución del sistema. Esta acción no se puede deshacer.',
+      confirmLabel: 'Sí, eliminar'
+    });
+
+    if (!confirmado) return;
 
     this.institucionService.eliminarInstitucion(this.id!).subscribe({
       next : () => {
-        alert('Institución eliminada correctamente.');
         this.router.navigate(['/instituciones']);
       },
       error : (e) => {
         console.log(e);
-        alert('Error al eliminar la institución');
       }
     });
   }}

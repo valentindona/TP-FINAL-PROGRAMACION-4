@@ -5,6 +5,8 @@ import { RouterLink } from '@angular/router';
 import { InstitucionService } from '../../../services/instituciones/institucion-service';
 import { Institucion } from '../../../models/institucion';
 import { AuthService } from '../../../service/auth-service';
+import { NotificationService } from '../../../service/notification-service';
+import { ConfirmService } from '../../../service/confirm-service';
 
 @Component({
   imports: [RouterLink, CommonModule, FormsModule],
@@ -25,6 +27,9 @@ export class InstitucionList implements OnInit{
   ////para la barra de navegacion
   filtroInstitucion = ''
 
+  private notifications = inject(NotificationService);
+  private confirmDialog = inject(ConfirmService);
+
   constructor(
     private iService : InstitucionService
   ){}
@@ -40,23 +45,25 @@ export class InstitucionList implements OnInit{
       },
       error : (e) => {
         console.log(e);
-        alert('Error al cargar las instituciones')
+        this.notifications.error('No se pudieron cargar las instituciones.')
       }
     })
   }
 
-  eliminarInstitucion( id : string){
-    const confirm= window.confirm(` ¿Estás seguro de eliminar la institución " ${id} "?`);
+  async eliminarInstitucion( id : string){
+    const confirmado = await this.confirmDialog.ask({
+      title: 'Eliminar institución',
+      message: `Se va a eliminar la institución con ID ${id}. Esta acción no se puede deshacer.`,
+      confirmLabel: 'Sí, eliminar'
+    });
 
-    if(confirm){
+    if (confirmado) {
       this.iService.eliminarInstitucion(id).subscribe({
         next : () => {
           this.cargarInstituciones();
-          alert('Institución eliminada correctamente');
         },
         error : (e) => {
           console.log(e);
-          alert('No se pudo eliminar la institución');
         }
       })
     }

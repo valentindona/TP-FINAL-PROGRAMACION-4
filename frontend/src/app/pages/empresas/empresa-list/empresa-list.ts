@@ -1,9 +1,11 @@
-import { ChangeDetectorRef, Component, OnInit, signal } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit, signal } from '@angular/core';
 import { Empresa } from '../../../models/empresa';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { EmpresaService } from '../../../services/empresas/empresa';
+import { NotificationService } from '../../../service/notification-service';
+import { ConfirmService } from '../../../service/confirm-service';
 
 @Component({
   imports: [RouterLink, CommonModule, FormsModule],
@@ -18,6 +20,9 @@ export class EmpresaList implements OnInit {
 
   ////para la barra de navegacion
   filtroEmpresa = '';
+
+  private notifications = inject(NotificationService);
+  private confirmDialog = inject(ConfirmService);
 
   constructor(
     private sEmpresa : EmpresaService
@@ -34,22 +39,24 @@ export class EmpresaList implements OnInit {
       },
       error : (e) => {
         console.log(e);
-        alert('Error al cargar empresas')
+        this.notifications.error('No se pudieron cargar las empresas.')
       }
     })
   }
 
-  eliminarEmpresa(id : string){
-    const confirmacion = window.confirm(`Estás seguro de eliminar la empresa " ${id} " ?`);
+  async eliminarEmpresa(id : string){
+    const confirmado = await this.confirmDialog.ask({
+      title: 'Eliminar empresa',
+      message: `Se va a eliminar la empresa con ID ${id}. Esta acción no se puede deshacer.`,
+      confirmLabel: 'Sí, eliminar'
+    });
 
-    if(confirmacion){
+    if (confirmado) {
       this.sEmpresa.eliminarEmpresa(id).subscribe({
         next : () => {
-          alert('Empresa eliminada correctamente');
           this.cargarEmpresas();
         },
         error : (e) => {
-          alert('No se pudo eliminar la empresa');
           console.log(e);
         }
       })

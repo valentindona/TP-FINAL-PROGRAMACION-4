@@ -1,7 +1,9 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Empresa } from '../../../models/empresa';
 import { EmpresaService } from '../../../services/empresas/empresa';
+import { NotificationService } from '../../../service/notification-service';
+import { ConfirmService } from '../../../service/confirm-service';
 
 @Component({
   imports: [RouterLink],
@@ -13,6 +15,9 @@ export class EmpresaDetail implements OnInit {
   
   empresa ?: Empresa;
   id ?: string
+
+  private notifications = inject(NotificationService);
+  private confirmDialog = inject(ConfirmService);
 
   constructor(
     private empresaService : EmpresaService,
@@ -33,24 +38,28 @@ export class EmpresaDetail implements OnInit {
         },
         error : (e) => {
           console.log(e);
-          alert('Error al buscar detalles de la empresa.')
+          this.notifications.error('No se pudieron cargar los detalles de la empresa.')
         }
       })
     }
   }
 
 
-  deleteEmpresa(){
-    if(!confirm('¿Desea eliminar la empresa?')) return; 
+  async deleteEmpresa(){
+    const confirmado = await this.confirmDialog.ask({
+      title: 'Eliminar empresa',
+      message: 'Se va a eliminar esta empresa del sistema. Esta acción no se puede deshacer.',
+      confirmLabel: 'Sí, eliminar'
+    });
+
+    if (!confirmado) return;
 
     this.empresaService.eliminarEmpresa(this.id!).subscribe({
       next : () => {
-        alert('Empresa eliminada correctamente.');
         this.router.navigate(['/empresas']);
       },
       error : (e) => {
         console.log(e);
-        alert('Error al eliminar empresa')
       }
     })
   }

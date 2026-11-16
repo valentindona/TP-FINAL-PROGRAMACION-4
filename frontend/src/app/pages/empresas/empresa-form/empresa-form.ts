@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Empresa } from '../../../models/empresa';
 import { EmpresaService } from '../../../services/empresas/empresa';
+import { NotificationService } from '../../../service/notification-service';
 
 @Component({
   imports: [ReactiveFormsModule, RouterLink],
@@ -14,6 +15,8 @@ export class EmpresaForm implements OnInit{
 
   formulario!: FormGroup;
   id ?: string;
+
+  private notifications = inject(NotificationService);
 
   constructor(
     private fb : FormBuilder,
@@ -40,7 +43,7 @@ export class EmpresaForm implements OnInit{
         next : (empresaEncontrada) => this.formulario.patchValue(empresaEncontrada),
         error : (e) => {
           console.log(e);
-          alert('Error al cargar los datos de la empresa')
+          this.notifications.error('No se pudieron cargar los datos de la empresa.')
         }
       })
     }
@@ -48,7 +51,8 @@ export class EmpresaForm implements OnInit{
 
   onSubmit(): void{
     if(this.formulario.invalid){
-      alert('No se pueden guardar los datos ingresados.')
+      this.formulario.markAllAsTouched();
+      this.notifications.error('Revisá los datos: hay campos vacíos o con formato inválido.')
       return;
     }
 
@@ -57,24 +61,20 @@ export class EmpresaForm implements OnInit{
     if(this.id){
       this.empresaService.editarEmpresa( {...dataForm, id : this.id} ).subscribe({
         next : () => {
-          alert('Empresa actualizada correctamente.');
           this.router.navigate(['/empresas', this.id])
         }, 
         error : (e) => {
           console.log(e);
-          alert('Error al editar los datos de la empresa')
         }
       })
     }else{
 
       this.empresaService.crearEmpresa(dataForm).subscribe({
         next : (data) =>{
-          alert('Empresa creada correctamente.');
           this.router.navigate(['/empresas', data.id])
         },
         error :(e) =>{
           console.log(e);
-          alert('Error al crear empresa.')
         }
       })
 

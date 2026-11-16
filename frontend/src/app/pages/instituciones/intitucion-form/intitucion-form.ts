@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { InstitucionService } from '../../../services/instituciones/institucion-service';
 import { Institucion } from '../../../models/institucion';
 import { AuthService } from '../../../service/auth-service';
+import { NotificationService } from '../../../service/notification-service';
 import { Estado } from '../../../enums/Estado';
 
 @Component({
@@ -18,6 +19,8 @@ export class InstitucionForm implements OnInit{
   formulario!: FormGroup;
   id?: string;
   esTesoreria = false;
+
+  private notifications = inject(NotificationService);
 
   constructor(
     private fb: FormBuilder,
@@ -56,7 +59,7 @@ export class InstitucionForm implements OnInit{
         }),
         error: (e) => {
           console.log(e);
-          alert('Error al cargar los datos de la institución');
+          this.notifications.error('No se pudieron cargar los datos de la institución.');
         }
       });
     }
@@ -64,7 +67,8 @@ export class InstitucionForm implements OnInit{
 
   onSubmit(): void {
     if (this.formulario.invalid) {
-      alert('No se pueden guardar los datos ingresados. Verificá los campos obligatorios y formatos.');
+      this.formulario.markAllAsTouched();
+      this.notifications.error('Revisá los datos: hay campos obligatorios vacíos o con formato inválido.');
       return;
     }
 
@@ -76,12 +80,10 @@ export class InstitucionForm implements OnInit{
         : this.institucionService.editarInstitucion({ ...dataForm, id: this.id });
       actualizacion.subscribe({
         next: () => {
-          alert('Institución actualizada correctamente.');
           this.router.navigate(['/instituciones', this.id]);
         },
         error: (e) => {
           console.log(e);
-          alert('Error al editar los datos de la institución');
         }
       });
     } else {
@@ -89,25 +91,23 @@ export class InstitucionForm implements OnInit{
       this.institucionService.institucionRepetida(dataForm).subscribe({
         next: (repetida) => {
           if (repetida) {
-            alert('Ya existe una institución registrada con el mismo nombre y dirección.');
+            this.notifications.error('Ya existe una institución registrada con el mismo nombre y dirección.');
             return;
           }
 
           // Crear nueva institución si no está repetida
           this.institucionService.crearInstitucion(dataForm).subscribe({
             next: (data) => {
-              alert('Institución creada correctamente.');
               this.router.navigate(['/instituciones', data.id]);
             },
             error: (e) => {
               console.log(e);
-              alert('Error al crear la institución.');
             }
           });
         },
         error: (e) => {
           console.log(e);
-          alert('Error al validar si la institución está repetida.');
+          this.notifications.error('No se pudo validar si la institución está repetida.');
         }
       });
     }

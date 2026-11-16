@@ -1,9 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { Donacion } from '../../../interfaces/donacion';
 import { DonacionService } from '../../../service/donacion-service';
+import { NotificationService } from '../../../service/notification-service';
+import { ConfirmService } from '../../../service/confirm-service';
 
 @Component({
   imports: [RouterLink, FormsModule, CommonModule],
@@ -14,6 +16,9 @@ import { DonacionService } from '../../../service/donacion-service';
 export class DonacionList implements OnInit{
   donaciones = signal<Donacion[]>([]);
   filtroDonacion = '';
+
+  private notifications = inject(NotificationService);
+  private confirmDialog = inject(ConfirmService);
 
   constructor(private donacionService: DonacionService) {}
 
@@ -28,22 +33,26 @@ export class DonacionList implements OnInit{
       },
       error: (e) => {
         console.log(e);
-        alert('Error al cargar las donaciones');
+        this.notifications.error('No se pudieron cargar las donaciones.');
       }
     });
   }
 
-  eliminarDonacion(id: number) {
-    if (!confirm(`¿Estás seguro de eliminar la donación N° ${id}?`)) return;
+  async eliminarDonacion(id: number) {
+    const confirmado = await this.confirmDialog.ask({
+      title: 'Eliminar donación',
+      message: `Se va a eliminar la donación N° ${id}. Esta acción no se puede deshacer.`,
+      confirmLabel: 'Sí, eliminar'
+    });
+
+    if (!confirmado) return;
 
     this.donacionService.eliminarDonacion(id).subscribe({
       next: () => {
         this.cargarDonaciones();
-        alert('Donación eliminada correctamente');
       },
       error: (e) => {
         console.log(e);
-        alert('No se pudo eliminar la donación');
       }
     });
   }
@@ -52,11 +61,9 @@ export class DonacionList implements OnInit{
     this.donacionService.confirmarDonacion(id).subscribe({
       next: () => {
         this.cargarDonaciones();
-        alert('Donación confirmada exitosamente');
       },
       error: (e) => {
         console.log(e);
-        alert('Error al confirmar la donación');
       }
     });
   }

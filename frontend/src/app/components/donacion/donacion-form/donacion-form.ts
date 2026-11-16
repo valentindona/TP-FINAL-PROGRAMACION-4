@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { DonacionService } from '../../../service/donacion-service';
+import { NotificationService } from '../../../service/notification-service';
 import { Estado } from '../../../enums/Estado';
 import { EstadoDonacion } from '../../../enums/EstadoDonacion';
 import { Categoria } from '../../../enums/Categoria';
@@ -25,6 +26,8 @@ export class DonacionForm implements OnInit{
   productos: ProductoResponse[] = [];
   categorias = Object.values(Categoria);
   unidades = Object.values(UnidadMedida);
+
+  private notifications = inject(NotificationService);
 
   constructor(
     private fb: FormBuilder,
@@ -50,11 +53,11 @@ export class DonacionForm implements OnInit{
 
     this.empresaService.obtenerEmpresas().subscribe({
       next: donantes => this.donantes = donantes,
-      error: error => alert('No se pudieron cargar los donantes: ' + error.message)
+      error: () => this.notifications.error('No se pudieron cargar los donantes.')
     });
     this.productoService.obtenerProductos().subscribe({
       next: productos => this.productos = productos,
-      error: error => alert('No se pudieron cargar los productos: ' + error.message)
+      error: () => this.notifications.error('No se pudieron cargar los productos.')
     });
 
     if (this.id) {
@@ -77,7 +80,7 @@ export class DonacionForm implements OnInit{
         },
         error: (e) => {
           console.log(e);
-          alert('Error al cargar la donación para editar.');
+          this.notifications.error('No se pudo cargar la donación para editar.');
         }
       });
     } else {
@@ -129,7 +132,7 @@ export class DonacionForm implements OnInit{
     if (this.items.length > 1) {
       this.items.removeAt(index);
     } else {
-      alert('La donación debe tener al menos un ítem.');
+      this.notifications.error('La donación debe tener al menos un ítem.');
     }
   }
 
@@ -181,23 +184,19 @@ export class DonacionForm implements OnInit{
     if (this.id) {
       this.donacionService.editarDonacion(this.id, donacionData).subscribe({
         next: () => {
-          alert('Donación actualizada correctamente');
           this.router.navigate(['/donaciones']);
         },
         error: (e) => {
           console.log(e);
-          alert('Error al actualizar la donación');
         }
       });
     } else {
       this.donacionService.crearDonacion(donacionData).subscribe({
         next: () => {
-          alert('Donación creada correctamente');
           this.router.navigate(['/donaciones']);
         },
         error: (e) => {
           console.log(e);
-          alert('Error al crear la donación');
         }
       });
     }

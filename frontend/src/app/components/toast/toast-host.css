@@ -1,0 +1,193 @@
+:host {
+    position: fixed;
+    z-index: 70;
+    top: calc(var(--header-h) + 16px);
+    right: max(18px, env(safe-area-inset-right));
+    width: min(380px, calc(100vw - 32px));
+    pointer-events: none;
+}
+
+.toast-viewport {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.toast {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: start;
+    gap: 11px;
+    overflow: hidden;
+    padding: 13px 12px 13px 14px;
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--brand);
+    border-radius: var(--r-md);
+    background: var(--surface);
+    box-shadow: var(--shadow-md);
+    pointer-events: auto;
+    animation: toast-in 300ms var(--ease-out) both;
+}
+
+.toast-mark {
+    display: grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    margin-top: 1px;
+    border-radius: 50%;
+    background: var(--brand-soft);
+    color: var(--brand-deep);
+}
+
+.toast-mark svg {
+    width: 15px;
+    height: 15px;
+}
+
+.toast-msg {
+    margin: 0;
+    padding-top: 3px;
+    color: var(--ink);
+    font-size: 0.88rem;
+    font-weight: 500;
+    line-height: 1.45;
+    overflow-wrap: anywhere;
+}
+
+.toast-close {
+    display: grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    padding: 0;
+    border: 0;
+    border-radius: 7px;
+    background: transparent;
+    color: var(--muted-2);
+    cursor: pointer;
+    transition: background-color var(--dur-1) var(--ease), color var(--dur-1) var(--ease);
+}
+
+.toast-close svg {
+    width: 13px;
+    height: 13px;
+}
+
+.toast-close:hover {
+    background: var(--canvas-2);
+    color: var(--ink);
+}
+
+.toast-close:focus-visible {
+    outline: 2px solid var(--brand-bright);
+    outline-offset: 1px;
+}
+
+.toast-progress {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    background: currentColor;
+    opacity: 0.35;
+    transform-origin: left center;
+    animation-name: toast-progress;
+    animation-timing-function: linear;
+    animation-fill-mode: forwards;
+}
+
+/* Tonos */
+
+.toast--success {
+    border-left-color: var(--ok);
+    color: var(--ok);
+}
+
+.toast--success .toast-mark {
+    background: var(--ok-soft);
+    color: var(--ok-ink);
+}
+
+.toast--error {
+    border-left-color: var(--danger);
+    color: var(--danger);
+}
+
+.toast--error .toast-mark {
+    background: var(--danger-soft);
+    color: var(--danger-ink);
+}
+
+.toast--info {
+    border-left-color: var(--info);
+    color: var(--info);
+}
+
+.toast--info .toast-mark {
+    background: var(--info-soft);
+    color: var(--info-ink);
+}
+
+.toast.is-leaving {
+    animation: toast-out 180ms var(--ease) forwards;
+}
+
+@keyframes toast-in {
+    from {
+        opacity: 0;
+        transform: translateX(16px) scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+    }
+}
+
+@keyframes toast-out {
+    to {
+        opacity: 0;
+        transform: translateX(14px) scale(0.98);
+    }
+}
+
+@keyframes toast-progress {
+    from {
+        transform: scaleX(1);
+    }
+    to {
+        transform: scaleX(0);
+    }
+}
+
+@media (max-width: 620px) {
+    :host {
+        top: auto;
+        right: 12px;
+        bottom: calc(12px + env(safe-area-inset-bottom));
+        left: 12px;
+        width: auto;
+    }
+
+    .toast {
+        padding: 12px 10px 12px 13px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .toast {
+        animation: none;
+    }
+
+    .toast-progress {
+        animation: none;
+        transform: scaleX(1);
+    }
+
+    .toast.is-leaving {
+        animation: none;
+        opacity: 0;
+    }
+}

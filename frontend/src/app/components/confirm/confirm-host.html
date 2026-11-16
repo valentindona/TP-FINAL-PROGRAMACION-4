@@ -1,0 +1,43 @@
+@if (confirm.request(); as request) {
+    <div class="confirm-layer" (click)="onBackdrop($event)" (keydown)="onKeydown($event)">
+        <section
+            class="confirm-card"
+            [class.confirm-card--danger]="request.tone === 'danger'"
+            role="alertdialog"
+            aria-modal="true"
+            aria-labelledby="confirm-title"
+            aria-describedby="confirm-message"
+        >
+            <span class="confirm-icon" aria-hidden="true">
+                @if (request.tone === 'danger') {
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 7h16" />
+                        <path d="M9.5 7V4.8h5V7" />
+                        <path d="M6.5 7l1 12.2a1.4 1.4 0 0 0 1.4 1.3h6.2a1.4 1.4 0 0 0 1.4-1.3L17.5 7" />
+                        <path d="M10.5 11v6M13.5 11v6" />
+                    </svg>
+                } @else {
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="9.2" />
+                        <path d="M12 11v5.4" />
+                        <path d="M12 7.8h.01" />
+                    </svg>
+                }
+            </span>
+
+            <div class="confirm-body">
+                <h2 id="confirm-title" class="confirm-title">{{ request.title }}</h2>
+                <p id="confirm-message" class="confirm-message">{{ request.message }}</p>
+            </div>
+
+            <div class="confirm-actions">
+                <button #cancelButton type="button" class="confirm-btn confirm-btn--cancel" (click)="confirm.cancel()">
+                    {{ request.cancelLabel }}
+                </button>
+                <button type="button" class="confirm-btn confirm-btn--accept" (click)="confirm.accept()">
+                    {{ request.confirmLabel }}
+                </button>
+            </div>
+        </section>
+    </div>
+}
