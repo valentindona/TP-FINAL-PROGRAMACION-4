@@ -1,67 +1,82 @@
-<h2>Crear Remito</h2>
+<div class="container-form">
+    <p class="eyebrow">Depósito · Entregas</p>
+    <h2>Crear Remito</h2>
 
-<form [formGroup]="formulario" (ngSubmit)="add()">
+    <form [formGroup]="formulario" class="form-grid" (ngSubmit)="add()">
 
-    <div>
-        <label for="">Fecha:</label>
-        <input type="date" formControlName="fecha">
+        <div class="field-block">
+            <label for="fecha">Fecha</label>
+            <input id="fecha" type="date" formControlName="fecha">
 
-        @if (formulario.controls.fecha.hasError('required') && formulario.controls.fecha.touched) {
-            <small class="error">Campo requerido</small>
-        }
-    </div>
-
-    <div>
-        <label for="">Institución:</label>
-
-        <select id="idInstitucion" formControlName="idInstitucion">
-            <option value="" disabled>
-                Seleccione una institución...
-            </option>
-
-            @for (institucion of instituciones; track $index) {
-                <option [value]="institucion.id">
-                    {{ institucion.nombre }}
-                </option>
+            @if (formulario.controls.fecha.hasError('required') && formulario.controls.fecha.touched) {
+                <small class="error">Campo requerido</small>
             }
-        </select>
+        </div>
 
-        @if (formulario.controls.idInstitucion.invalid && formulario.controls.idInstitucion.touched) {
-            <small class="error">
-                Debe seleccionar una institución
-            </small>
-        }
-    </div>
+        <div class="field-block">
+            <label for="idInstitucion">Institución</label>
 
-    <div formArrayName="items">
-        <h3>Ítems de donación</h3>
-        @for (detalle of items.controls; track $index; let i = $index) {
-            <div [formGroupName]="i">
-                <label>Producto / ítem</label>
-                <select formControlName="idItemDonacion">
-                    <option value="" disabled>Seleccione un ítem disponible...</option>
-                    @for (item of itemsDisponibles; track item.id) {
-                        <option [value]="item.id">
-                            {{ item.productoNombre }} — {{ item.donante }} — disponibles: {{ item.cantidad }}
-                        </option>
-                    }
-                </select>
+            <select id="idInstitucion" formControlName="idInstitucion">
+                <option value="" disabled>
+                    Seleccione una institución...
+                </option>
 
-                <label>Cantidad a entregar</label>
-                <input type="number" formControlName="cantidad" min="1">
+                @for (institucion of instituciones; track $index) {
+                    <option [value]="institucion.id">
+                        {{ institucion.nombre }}
+                    </option>
+                }
+            </select>
 
-                <button type="button" (click)="eliminarItem(i)" [disabled]="items.length === 1">
-                    Quitar ítem
-                </button>
+            @if (formulario.controls.idInstitucion.invalid && formulario.controls.idInstitucion.touched) {
+                <small class="error">
+                    Debe seleccionar una institución
+                </small>
+            }
+        </div>
+
+        <div class="field-block full items-builder" formArrayName="items">
+            <div>
+                <h3>Ítems de donación</h3>
+                <p class="builder-hint">Elegí los productos y la cantidad a entregar en este remito.</p>
             </div>
-        }
-        <button type="button" (click)="agregarItem()">Agregar otro ítem</button>
-    </div>
 
-    <div>
-        <button type="submit" [disabled]="formulario.invalid">
-            Crear Remito
-        </button>
-    </div>
+            <div class="items-container">
+                @for (detalle of items.controls; track $index; let i = $index) {
+                    <div [formGroupName]="i" class="item-row">
+                        <div class="field-block">
+                            <label>Producto / ítem</label>
+                            <select formControlName="idItemDonacion">
+                                <option value="" disabled>Seleccione un ítem disponible...</option>
+                                @for (item of itemsDisponibles; track item.id) {
+                                    <option [value]="item.id">
+                                        {{ item.productoNombre }} — {{ item.donante }} — disponibles: {{ item.cantidad }}
+                                    </option>
+                                }
+                            </select>
+                        </div>
 
-</form>
+                        <div class="field-block">
+                            <label>Cantidad a entregar</label>
+                            <input type="number" formControlName="cantidad" min="1">
+                        </div>
+
+                        <button type="button" class="btn-remove" (click)="eliminarItem(i)" [disabled]="items.length === 1">
+                            Quitar ítem
+                        </button>
+                    </div>
+                }
+            </div>
+
+            <button type="button" class="btn-add" (click)="agregarItem()">+ Agregar otro ítem</button>
+        </div>
+
+        <div class="form-actions">
+            <a routerLink="/remitos">Cancelar</a>
+            <button type="submit" [disabled]="formulario.invalid">
+                Crear Remito
+            </button>
+        </div>
+
+    </form>
+</div>

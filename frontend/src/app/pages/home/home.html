@@ -1,50 +1,192 @@
 <main class="dashboard">
-    <h1>Panel de gestión</h1>
+    <header class="page-head">
+        <div class="page-head-copy">
+            <p class="eyebrow">Panel de gestión</p>
+            <h1>Resumen operativo</h1>
+            <p class="page-sub">
+                Sesión iniciada como <strong>{{ auth.username() }}</strong>. Accedé a los módulos habilitados para tu perfil.
+            </p>
+        </div>
+
+        <div class="role-chips" aria-label="Perfiles de la sesión">
+            @if (auth.hasRole('USER_DEPOSITO')) {
+                <span class="role-chip role-dep"><span class="role-dot" aria-hidden="true"></span>Depósito</span>
+            }
+            @if (auth.hasRole('USER_TESORERIA')) {
+                <span class="role-chip role-tes"><span class="role-dot" aria-hidden="true"></span>Tesorería</span>
+            }
+            @if (auth.hasRole('USER_INSTITUCIONAL')) {
+                <span class="role-chip role-ins"><span class="role-dot" aria-hidden="true"></span>Institucional</span>
+            }
+        </div>
+    </header>
+
     @if (auth.hasRole('USER_DEPOSITO')) {
-        <section class="dashboard-section">
-            <h2>Depósito</h2>
-            <nav class="dashboard-links" aria-label="Módulos de depósito">
-                <a routerLink="/empresas">Empresas</a>
-                <a routerLink="/donaciones">Donaciones</a>
-                <a routerLink="/remitos">Remitos</a>
-                <a routerLink="/itemdonacion">Ítems de donación</a>
-                <a routerLink="/productos">Productos</a>
-                <a routerLink="/facturas">Facturas</a>
-                <a routerLink="/instituciones">Instituciones <span>Solo lectura</span></a>
+        <section class="module-section">
+            <div class="section-lead">
+                <h2>Depósito</h2>
+                <p>Ingresos, stock, entregas y comprobantes.</p>
+            </div>
+
+            <nav class="module-grid" aria-label="Módulos de depósito">
+                <a routerLink="/empresas" class="module-card">
+                    <span class="module-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="7" width="8" height="14" rx="1.2" />
+                            <rect x="13" y="3" width="8" height="18" rx="1.2" />
+                            <path d="M6 11h2M6 15h2M16 7h2M16 11h2M16 15h2" />
+                        </svg>
+                    </span>
+                    <span class="module-text">
+                        <strong>Empresas</strong>
+                        <small>Donantes y datos fiscales</small>
+                    </span>
+                    <span class="module-arrow" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6" /></svg>
+                    </span>
+                </a>
+
+                <a routerLink="/donaciones" class="module-card">
+                    <span class="module-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 20.5S4.5 16.2 4.5 10.9A4.1 4.1 0 0 1 12 8.2a4.1 4.1 0 0 1 7.5 2.7c0 5.3-7.5 9.6-7.5 9.6Z" />
+                        </svg>
+                    </span>
+                    <span class="module-text">
+                        <strong>Donaciones</strong>
+                        <small>Altas, estado y detalle</small>
+                    </span>
+                    <span class="module-arrow" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6" /></svg>
+                    </span>
+                </a>
+
+                <a routerLink="/remitos" class="module-card">
+                    <span class="module-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M2.5 6.5h11v10h-11z" />
+                            <path d="M13.5 10h4l3 3v3.5h-7z" />
+                            <circle cx="6.5" cy="18.5" r="1.7" />
+                            <circle cx="17" cy="18.5" r="1.7" />
+                        </svg>
+                    </span>
+                    <span class="module-text">
+                        <strong>Remitos</strong>
+                        <small>Entregas a instituciones</small>
+                    </span>
+                    <span class="module-arrow" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6" /></svg>
+                    </span>
+                </a>
+
+                <a routerLink="/itemdonacion" class="module-card">
+                    <span class="module-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 2.8 3.2 7.4v9.2L12 21.2l8.8-4.6V7.4L12 2.8Z" />
+                            <path d="M3.2 7.4 12 12l8.8-4.6M12 12v9.2" />
+                        </svg>
+                    </span>
+                    <span class="module-text">
+                        <strong>Ítems de donación</strong>
+                        <small>Stock disponible por producto</small>
+                    </span>
+                    <span class="module-arrow" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6" /></svg>
+                    </span>
+                </a>
+
+                <a routerLink="/productos" class="module-card">
+                    <span class="module-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20.4 12.6 12.6 20.4a1.8 1.8 0 0 1-2.5 0L3.6 13.9a1.8 1.8 0 0 1-.5-1.3V5.4a1.8 1.8 0 0 1 1.8-1.8h7.2c.5 0 1 .2 1.3.5l6.5 6.5a1.8 1.8 0 0 1 0 2Z" />
+                            <circle cx="8.2" cy="8.2" r="1.3" />
+                        </svg>
+                    </span>
+                    <span class="module-text">
+                        <strong>Productos</strong>
+                        <small>Catálogo y categorías</small>
+                    </span>
+                    <span class="module-arrow" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6" /></svg>
+                    </span>
+                </a>
+
+                <a routerLink="/facturas" class="module-card">
+                    <span class="module-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M6 2.8h12v18.4l-3-1.9-3 1.9-3-1.9-3 1.9V2.8Z" />
+                            <path d="M9.2 8.2h5.6M9.2 12h5.6" />
+                        </svg>
+                    </span>
+                    <span class="module-text">
+                        <strong>Facturas</strong>
+                        <small>Comprobantes emitidos</small>
+                    </span>
+                    <span class="module-arrow" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6" /></svg>
+                    </span>
+                </a>
+
+                <a routerLink="/instituciones" class="module-card">
+                    <span class="module-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 21h18M5 21V9.4L12 4.5l7 4.9V21" />
+                            <path d="M9.8 21v-6.2h4.4V21" />
+                        </svg>
+                    </span>
+                    <span class="module-text">
+                        <strong>Instituciones <span class="tag">Solo lectura</span></strong>
+                        <small>Entidades beneficiarias</small>
+                    </span>
+                    <span class="module-arrow" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6" /></svg>
+                    </span>
+                </a>
             </nav>
         </section>
 
         @if (auth.hasAuthority('AUDITORIA_DONACION_VER')) {
-            <section class="dashboard-section">
-                <h2>Auditoría de donantes</h2>
-                <p>Consultá el historial de cambios de un donante desde su registro.</p>
-                <a class="dashboard-action" routerLink="/empresas">Elegir donante</a>
+            <section class="panel panel-audit">
+                <div class="panel-head">
+                    <div>
+                        <p class="eyebrow">Auditoría</p>
+                        <h2>Historial de donantes</h2>
+                        <p>Consultá el historial de cambios de un donante desde su registro.</p>
+                    </div>
+                    <a class="btn-soft" routerLink="/empresas">Elegir donante</a>
+                </div>
             </section>
         }
 
         <section class="recent-section">
-            <article class="dashboard-section">
-                <div class="section-heading">
+            <article class="panel">
+                <div class="panel-head">
                     <div>
+                        <p class="eyebrow">Movimientos</p>
                         <h2>Últimas donaciones cargadas</h2>
                         <p>Las cinco donaciones más recientes.</p>
                     </div>
-                    <a class="dashboard-action" routerLink="/donaciones">Ver todas</a>
+                    <a class="btn-soft" routerLink="/donaciones">Ver todas</a>
                 </div>
 
                 @if (errorDonaciones()) {
                     <p class="error-message">{{ errorDonaciones() }}</p>
                 } @else {
-                    <div class="recent-list">
+                    <div class="data-rows">
                         @for (donacion of ultimasDonaciones(); track donacion.id) {
-                            <article class="recent-item">
-                                <div>
+                            <article class="data-row">
+                                <span class="row-mark" aria-hidden="true">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M12 20.5S4.5 16.2 4.5 10.9A4.1 4.1 0 0 1 12 8.2a4.1 4.1 0 0 1 7.5 2.7c0 5.3-7.5 9.6-7.5 9.6Z" />
+                                    </svg>
+                                </span>
+                                <div class="row-main">
                                     <h3>Donación #{{ donacion.id }}</h3>
                                     <p>{{ donacion.nombreDonante || 'Donante sin nombre' }}</p>
-                                    <span>{{ donacion.fecha | date:'dd/MM/yyyy' }} · {{ donacion.estado }}</span>
+                                    <span class="row-meta">{{ donacion.fecha | date:'dd/MM/yyyy' }} · {{ donacion.estado }}</span>
                                 </div>
                                 @if (donacion.id !== undefined) {
-                                    <a [routerLink]="['/donaciones', donacion.id]">Ver detalle</a>
+                                    <a class="row-link" [routerLink]="['/donaciones', donacion.id]">Ver detalle</a>
                                 }
                             </article>
                         } @empty {
@@ -54,27 +196,36 @@
                 }
             </article>
 
-            <article class="dashboard-section">
-                <div class="section-heading">
+            <article class="panel">
+                <div class="panel-head">
                     <div>
+                        <p class="eyebrow">Entregas</p>
                         <h2>Últimos remitos emitidos</h2>
                         <p>Los cinco remitos con fecha de emisión más reciente.</p>
                     </div>
-                    <a class="dashboard-action" routerLink="/remitos">Ver todos</a>
+                    <a class="btn-soft" routerLink="/remitos">Ver todos</a>
                 </div>
 
                 @if (remitoService.error()) {
                     <p class="error-message">{{ remitoService.error() }}</p>
                 } @else {
-                    <div class="recent-list">
+                    <div class="data-rows">
                         @for (remito of ultimosRemitos(); track remito.id) {
-                            <article class="recent-item">
-                                <div>
+                            <article class="data-row">
+                                <span class="row-mark" aria-hidden="true">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M2.5 6.5h11v10h-11z" />
+                                        <path d="M13.5 10h4l3 3v3.5h-7z" />
+                                        <circle cx="6.5" cy="18.5" r="1.7" />
+                                        <circle cx="17" cy="18.5" r="1.7" />
+                                    </svg>
+                                </span>
+                                <div class="row-main">
                                     <h3>Remito {{ remito.id }}</h3>
                                     <p>{{ remito.institucionNombre || 'Institución sin nombre' }}</p>
-                                    <span>{{ remito.fecha | date:'dd/MM/yyyy' }}</span>
+                                    <span class="row-meta">{{ remito.fecha | date:'dd/MM/yyyy' }}</span>
                                 </div>
-                                <a routerLink="/remitos">Ver listado</a>
+                                <a class="row-link" routerLink="/remitos">Ver listado</a>
                             </article>
                         } @empty {
                             <p class="empty-state">Todavía no hay remitos emitidos.</p>
@@ -86,25 +237,47 @@
     }
 
     @if (auth.hasAnyRole(['USER_INSTITUCIONAL', 'USER_TESORERIA'])) {
-        <section class="dashboard-section">
-            <h2>Instituciones</h2>
-            <p>Consulta, filtrado y gestión de instituciones según tu perfil.</p>
-            <nav class="dashboard-links" aria-label="Módulos institucionales">
-                <a routerLink="/instituciones">Gestión de instituciones</a>
+        <section class="module-section">
+            <div class="section-lead">
+                <h2>Instituciones</h2>
+                <p>Consulta, filtrado y gestión de instituciones según tu perfil.</p>
+            </div>
+
+            <nav class="module-grid" aria-label="Módulos institucionales">
+                <a routerLink="/instituciones" class="module-card">
+                    <span class="module-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 21h18M5 21V9.4L12 4.5l7 4.9V21" />
+                            <path d="M9.8 21v-6.2h4.4V21" />
+                        </svg>
+                    </span>
+                    <span class="module-text">
+                        <strong>Gestión de instituciones</strong>
+                        <small>Entidades beneficiarias y estado de pago</small>
+                    </span>
+                    <span class="module-arrow" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6" /></svg>
+                    </span>
+                </a>
             </nav>
         </section>
 
         @if (auth.hasAuthority('AUDITORIA_INSTITUCION_VER')) {
-            <section class="dashboard-section">
-                <h2>Auditoría de instituciones</h2>
-                <p>Consultá el historial de cambios desde el registro de cada institución.</p>
-                <a class="dashboard-action" routerLink="/instituciones">Elegir institución</a>
+            <section class="panel panel-audit">
+                <div class="panel-head">
+                    <div>
+                        <p class="eyebrow">Auditoría</p>
+                        <h2>Historial de instituciones</h2>
+                        <p>Consultá el historial de cambios desde el registro de cada institución.</p>
+                    </div>
+                    <a class="btn-soft" routerLink="/instituciones">Elegir institución</a>
+                </div>
             </section>
         }
     }
 
     @if (!auth.hasAnyRole(['USER_DEPOSITO', 'USER_INSTITUCIONAL', 'USER_TESORERIA'])) {
-        <section class="dashboard-section access-warning">
+        <section class="panel access-warning">
             <h2>Perfil de acceso no disponible</h2>
             <p>No encontramos un rol de usuario habilitado en esta sesión. Cerrá sesión y volvé a ingresar.</p>
             <button type="button" (click)="auth.logout()">Cerrar sesión</button>

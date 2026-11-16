@@ -1,12 +1,16 @@
 <div class="container-details">
 
     @if(donacion){
-        
+
+        <header class="detail-head">
+            <p class="eyebrow">Depósito · Donación</p>
+            <h1>Donación N° {{ donacion.id }}</h1>
+        </header>
+
         <article>
-            <h2>Donación N° {{ donacion.id }}</h2>
             <p><strong>Fecha:</strong> {{ donacion.fecha }}</p>
             <p><strong>N° Remito Proveedor:</strong> {{ donacion.nroRemitoProveedor }}</p>
-            <p><strong>Estado:</strong> 
+            <p><strong>Estado:</strong>
                 <span class="badge" [ngClass]="donacion.estado?.toLowerCase()">
                     {{ donacion.estado }}
                 </span>
@@ -39,7 +43,7 @@
         </div>
 
     }@else{
-        <p class="empty-message">No hay donación cargada con el ID ingresado</p>
+        <p class="empty-state">No hay donación cargada con el ID ingresado</p>
     }
 
 </div>

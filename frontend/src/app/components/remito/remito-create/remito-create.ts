@@ -1,4 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { RemitoService } from '../../../service/remito-service';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RemitoRequest } from '../../../interfaces/remito';
@@ -8,7 +9,7 @@ import { ItemdonacionService } from '../../../service/itemdonacion-service';
 import { ItemDonacionResponse } from '../../../interfaces/ItemDonacion';
 
 @Component({
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, RouterLink],
   selector: 'app-remito-create',
   styleUrl: './remito-create.css',
   templateUrl: './remito-create.html',

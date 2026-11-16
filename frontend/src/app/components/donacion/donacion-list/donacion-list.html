@@ -1,9 +1,16 @@
 <div class="container-lista">
-        
-    <div class="encabezado">
-        <h1>Gestión de Donaciones</h1>
 
-        <a routerLink="/donaciones/form" class="btn-create"> Nueva donación </a>
+    <div class="encabezado">
+        <div>
+            <p class="eyebrow">Depósito · Ingresos</p>
+            <h1>Gestión de donaciones</h1>
+            <p>Donaciones recibidas, su estado y el remito del proveedor.</p>
+        </div>
+
+        <div class="head-actions">
+            <span class="count-chip">{{ donacionesFiltradas.length }} registros</span>
+            <a routerLink="/donaciones/form" class="btn-create"> Nueva donación </a>
+        </div>
     </div>
 
     <div class="barra-busqueda">
@@ -15,9 +22,9 @@
             <article class="item">
 
                 <div class="data">
-                    <h2>Remito N°: {{d.nroRemitoProveedor}}</h2>
-                    <h3>Fecha: {{d.fecha}}</h3>
-                    <p><strong>Estado:</strong> 
+                    <h2>Donación · Remito N° {{d.nroRemitoProveedor}}</h2>
+                    <h3>Fecha {{d.fecha}}</h3>
+                    <p><strong>Estado:</strong>
                         <span class="badge" [ngClass]="d.estado?.toLowerCase()">
                             {{d.estado}}
                         </span>

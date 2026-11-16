@@ -1,0 +1,5 @@
+/* El listado usa la estructura compartida definida en src/styles.css. */
+
+:host {
+    display: block;
+}

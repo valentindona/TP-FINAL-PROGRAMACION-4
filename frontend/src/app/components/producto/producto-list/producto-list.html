@@ -1,41 +1,63 @@
-<section>
-    <div class="section-heading">
-        <h1>Listado de productos</h1>
-        <a routerLink="/productos/form" class="btn-create">Nuevo producto</a>
+<section class="container-lista">
+
+    <div class="encabezado">
+        <div>
+            <p class="eyebrow">Depósito · Catálogo</p>
+            <h1>Productos</h1>
+            <p>Catálogo de productos con su categoría y unidad de medida.</p>
+        </div>
+
+        <div class="head-actions">
+            <span class="count-chip">{{ productoService.productos().length }} registros</span>
+            <a routerLink="/productos/form" class="btn-create">Nuevo producto</a>
+        </div>
     </div>
 
-    <div>
-        <label for="buscarId">Buscar por id: </label>
-        <input id="buscarId" type="number" [(ngModel)]="searchId">
-        <button (click)="buscar()">Buscar</button>
+    <div class="toolbar">
+        <div class="field-inline">
+            <label for="buscarId">Buscar por ID</label>
+            <div class="inline-controls">
+                <input id="buscarId" type="number" [(ngModel)]="searchId">
+                <button (click)="buscar()">Buscar</button>
+            </div>
+        </div>
+
+        <div class="field-inline">
+            <label for="filtroCategoria">Filtrar por categoría</label>
+            <select id="filtroCategoria" [(ngModel)]="categoria" (change)="buscarCategoria()">
+                <option value="">Todas las categorías</option>
+                @for (cat of categorias; track cat) {
+                    <option [value]="cat">{{ cat.replaceAll('_', ' ') }}</option>
+                }
+            </select>
+        </div>
     </div>
 
     @if (productoService.productoById(); as p) {
-        <div>
-            <p>Producto: {{ p.nombre }} - Categoria: {{ p.categoria }} - Unidad de medida: {{ p.unidadMedida }}</p>
-        </div>
+        <article class="lookup-result">
+            <h3>Producto encontrado</h3>
+            <p>{{ p.nombre }} · Categoría {{ p.categoria }} · Unidad de medida {{ p.unidadMedida }}</p>
+        </article>
     }
 
-    <div>
-        <label for="filtroCategoria">Filtrar por categoría: </label>
-        <select id="filtroCategoria" [(ngModel)]="categoria" (change)="buscarCategoria()">
-            <option value="">Todas las categorías</option>
-            @for (cat of categorias; track cat) {
-                <option [value]="cat">{{ cat.replaceAll('_', ' ') }}</option>
-            }
-        </select>
-    </div>
-
-    <ul>
+    <div class="list">
         @for (item of productoService.productos(); track $index) {
-            <li>
-                Producto: {{ item.nombre }} - Categoria: {{ item.categoria }} - Unidad de medida: {{ item.unidadMedida }}
+            <article class="item">
+                <div class="data">
+                    <h2>{{ item.nombre }}</h2>
+                    <h3>{{ item.categoria }}</h3>
+                    <p><strong>Unidad:</strong> {{ item.unidadMedida }}</p>
+                </div>
 
-                <button (click)="editar(item)">Editar</button>
-                <button (click)="eliminar(item.id!)">Eliminar</button>
-            </li>
+                <div class="btns">
+                    <button (click)="editar(item)" class="btn-edit">Editar</button>
+                    <button (click)="eliminar(item.id!)" class="btn-delete">Eliminar</button>
+                </div>
+            </article>
+        } @empty {
+            <p>No hay productos cargados</p>
         }
-    </ul>
+    </div>
 
     @if (productoService.productoById(); as p) {
         <app-producto-edit></app-producto-edit>

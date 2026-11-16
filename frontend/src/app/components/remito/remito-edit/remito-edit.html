@@ -1,17 +1,21 @@
-<section>
-
-    <h2>Editar remito</h2>
-
-    <form [formGroup]="formulario">
-
+<section class="editor-panel">
+    <header class="editor-head">
         <div>
-            <label for="">Fecha</label>
-            <input type="date" formControlName="fecha">
+            <p class="eyebrow">Remito · Edición</p>
+            <h2>Editar remito</h2>
+        </div>
+    </header>
+
+    <form [formGroup]="formulario" class="form-grid">
+
+        <div class="field-block">
+            <label for="edit-fecha">Fecha</label>
+            <input id="edit-fecha" type="date" formControlName="fecha">
         </div>
 
-        <div>
-            <label for="">Institución</label>
-            <select formControlName="idInstitucion">
+        <div class="field-block">
+            <label for="edit-institucion">Institución</label>
+            <select id="edit-institucion" formControlName="idInstitucion">
                 <option [ngValue]="0" disabled>Seleccione una institución...</option>
                 @for (institucion of instituciones; track institucion.id) {
                     <option [ngValue]="idValue(institucion.id)">{{ institucion.nombre }}</option>
@@ -19,16 +23,11 @@
             </select>
         </div>
 
-        <div>
-
-            <button (click)="save()" [disabled]="formulario.invalid">
+        <div class="form-actions">
+            <button type="button" class="btn-back" (click)="cancel()">Cancelar</button>
+            <button type="button" (click)="save()" [disabled]="formulario.invalid">
                 Guardar cambios
             </button>
-
-            <button (click)="cancel()">
-                Cancelar
-            </button>
-
         </div>
 
     </form>

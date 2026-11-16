@@ -1,28 +1,59 @@
-<section>
-    <h1>Listado de Item Donacion</h1>
+<section class="container-lista">
 
-    <div>
-        <label for="buscarId">Buscar por id: </label>
-        <input type="text" id="buscarId" [(ngModel)]="searchId">
-        <button (click)="buscar()">Buscar</button>
+    <div class="encabezado">
+        <div>
+            <p class="eyebrow">Depósito · Stock</p>
+            <h1>Ítems de donación</h1>
+            <p>Productos recibidos con su donante de origen, cantidad y vencimiento.</p>
+        </div>
+
+        <div class="head-actions">
+            <span class="count-chip">{{ itemService.items().length }} registros</span>
+        </div>
+    </div>
+
+    <div class="toolbar">
+        <div class="field-inline">
+            <label for="buscarId">Buscar por ID</label>
+            <div class="inline-controls">
+                <input type="text" id="buscarId" [(ngModel)]="searchId">
+                <button (click)="buscar()">Buscar</button>
+            </div>
+        </div>
     </div>
 
     @if (itemService.itemById(); as i) {
-        <div>
-            <p>Producto: {{i.productoNombre}} - Donante: {{i.donante}} - Valor unitario: {{i.valorUnitario}} - Cantidad: {{i.cantidad}} - Fecha de vencimiento: {{i.fechaVencimiento}}</p>
-        </div>
+        <article class="lookup-result">
+            <h3>Ítem encontrado</h3>
+            <p>
+                {{ i.productoNombre }} · Donante {{ i.donante }} · {{ i.cantidad }} unidades ·
+                Valor unitario ${{ i.valorUnitario }} · Vence {{ i.fechaVencimiento }}
+            </p>
+        </article>
     }
 
-    <ul>
+    <div class="list">
         @for (i of itemService.items(); track $index) {
-            <li>
-                Producto: {{i.productoNombre}} - Donante: {{i.donante}} - Valor unitario: {{i.valorUnitario}} - Cantidad: {{i.cantidad}} - Fecha de vencimiento: {{i.fechaVencimiento}}
+            <article class="item">
 
-                <button (click)="editar(i)">Editar</button>
-                <button (click)="eliminar(i.id!)">Eliminar</button>
-            </li>
+                <div class="data">
+                    <h2>{{ i.productoNombre }}</h2>
+                    <h3>{{ i.donante }}</h3>
+                    <p><strong>Cantidad:</strong> {{ i.cantidad }}</p>
+                    <p><strong>Valor unit.:</strong> ${{ i.valorUnitario }}</p>
+                    <p><strong>Vence:</strong> {{ i.fechaVencimiento }}</p>
+                </div>
+
+                <div class="btns">
+                    <button (click)="editar(i)" class="btn-edit">Editar</button>
+                    <button (click)="eliminar(i.id!)" class="btn-delete">Eliminar</button>
+                </div>
+
+            </article>
+        } @empty {
+            <p>No hay ítems de donación cargados</p>
         }
-    </ul>
+    </div>
 
     @if (itemService.itemById(); as i) {
         <app-item-donacion-edit></app-item-donacion-edit>
@@ -33,4 +64,5 @@
             {{ mensajeError }}
         </div>
     }
+
 </section>

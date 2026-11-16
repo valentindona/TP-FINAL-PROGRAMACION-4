@@ -1,0 +1,10 @@
+/* El editor usa la estructura compartida definida en src/styles.css.
+   Los cuatro campos numéricos entran en una sola fila en pantallas amplias. */
+
+:host {
+    display: block;
+}
+
+.form-grid {
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+}

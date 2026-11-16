@@ -3,6 +3,7 @@ import { authGuard, authorityGuard, guestGuard, roleGuard } from './guards/auth-
 import { Home } from './pages/home/home';
 import { Historial } from './pages/auditoria/historial/historial';
 import { Login } from './pages/login/login';
+import { Welcome } from './pages/welcome/welcome';
 import { EmpresaDetail } from './pages/empresas/empresa-detail/empresa-detail';
 import { EmpresaForm } from './pages/empresas/empresa-form/empresa-form';
 import { EmpresaList } from './pages/empresas/empresa-list/empresa-list';
@@ -24,9 +25,9 @@ const instituciones = ['USER_DEPOSITO', 'USER_INSTITUCIONAL', 'USER_TESORERIA'];
 const administracionInstituciones = ['USER_INSTITUCIONAL', 'USER_TESORERIA'];
 
 export const routes: Routes = [
+    { path: '', component: Welcome },
     { path: 'login', component: Login, canActivate: [guestGuard] },
     { path: 'home', component: Home, canActivate: [authGuard] },
-    { path: '', pathMatch: 'full', redirectTo: 'home' },
 
     { path: 'empresas', component: EmpresaList, canActivate: [roleGuard], data: { roles: deposito } },
     { path: 'empresas/form', component: EmpresaForm, canActivate: [roleGuard], data: { roles: deposito } },

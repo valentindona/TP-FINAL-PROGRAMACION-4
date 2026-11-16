@@ -1,12 +1,17 @@
-<section>
-    <h2>Editar item</h2>
-
-    <form [formGroup]="formulario">
+<section class="editor-panel">
+    <header class="editor-head">
         <div>
+            <p class="eyebrow">Ítem · Edición</p>
+            <h2>Editar item</h2>
+        </div>
+    </header>
+
+    <form [formGroup]="formulario" class="form-grid" (ngSubmit)="save()">
+        <div class="field-block full">
             <label for="donante">Donante</label>
-            <input 
-                id="donante" 
-                type="text" 
+            <input
+                id="donante"
+                type="text"
                 [value]="textoBusquedaDonante()"
                 (input)="onInputDonante($event)"
                 placeholder="Escribe el nombre del donante..."
@@ -14,55 +19,58 @@
             />
 
             @if (donantesFiltrados().length > 0 && !donanteSeleccionado()) {
-                <ul>
-                @for (d of donantesFiltrados(); track d.id) {
-                    <li (click)="seleccionarDonante(d)">
-                    {{ d.razon_social }}
-                    </li>
-                }
+                <ul class="autocomplete">
+                    @for (d of donantesFiltrados(); track d.id) {
+                        <li (click)="seleccionarDonante(d)">
+                            <strong>{{ d.razon_social }}</strong>
+                            <span>CUIT {{ d.cuit }}</span>
+                        </li>
+                    }
                 </ul>
             }
 
             @if (donanteSeleccionado()) {
-                <small style="color: green;">✓ Donante seleccionado: {{ donanteSeleccionado()?.razon_social }}</small>
+                <small class="hint-ok">✓ Donante seleccionado: {{ donanteSeleccionado()?.razon_social }}</small>
             }
         </div>
 
-    <!-- PRODUCTO -->
+        <!-- PRODUCTO -->
 
-        <div>
+        <div class="field-block">
             <label for="producto">Producto</label>
             <select id="producto" formControlName="productoId">
-            <option [ngValue]="0" disabled>Seleccione un producto...</option>
-            @for (prod of productoService.productos(); track prod.id) {
-                <option [ngValue]="prod.id">{{ prod.nombre }} ({{ prod.unidadMedida }})</option>
-            }
+                <option [ngValue]="0" disabled>Seleccione un producto...</option>
+                @for (prod of productoService.productos(); track prod.id) {
+                    <option [ngValue]="prod.id">{{ prod.nombre }} ({{ prod.unidadMedida }})</option>
+                }
             </select>
         </div>
 
-  <!-- CANTIDAD -->
+        <!-- CANTIDAD -->
 
-        <div>
-            <label for= "cantidad">Cantidad</label>
+        <div class="field-block">
+            <label for="cantidad">Cantidad</label>
             <input type="number" id="cantidad" formControlName="cantidad" min="1">
         </div>
 
-  <!-- VALOR UNITARIO -->
+        <!-- VALOR UNITARIO -->
 
-        <div>
+        <div class="field-block">
             <label for="valor">Valor unitario</label>
             <input type="number" step="0.01" id="valor" formControlName="valorUnitario">
         </div>
 
-  <!-- FECHA VENCIMIENTO -->
+        <!-- FECHA VENCIMIENTO -->
 
-        <div>
+        <div class="field-block">
             <label for="fecha">Fecha de vencimiento</label>
             <input type="date" id="fecha" formControlName="fechaVencimiento">
         </div>
 
-        <button type="submit" [disabled]="formulario.invalid">Guardar cambios</button>
-        <button type="button" (click)="cancel()">Cancelar</button>
+        <div class="form-actions">
+            <button type="button" class="btn-back" (click)="cancel()">Cancelar</button>
+            <button type="submit" [disabled]="formulario.invalid">Guardar cambios</button>
+        </div>
     </form>
-    
+
 </section>

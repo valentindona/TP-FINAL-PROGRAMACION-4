@@ -1,42 +1,43 @@
-<section>
-    <h2>Editar producto</h2>
-
-    <form [formGroup]="formulario">
+<section class="editor-panel">
+    <header class="editor-head">
         <div>
-            <label for="">Nombre</label>
-            <input type="text" formControlName="nombre">
+            <p class="eyebrow">Catálogo · Edición</p>
+            <h2>Editar producto</h2>
+        </div>
+    </header>
+
+    <form [formGroup]="formulario" class="form-grid" (ngSubmit)="save()">
+        <div class="field-block">
+            <label for="edit-nombre">Nombre</label>
+            <input id="edit-nombre" type="text" formControlName="nombre">
         </div>
 
-        <div>
-            <label for="">Categoria</label>
-            <select id="categoria" formControlName = 'categoria'> //Crea la lista desplegable
-            <option value="" disabled selected>Seleccione una categoria...</option> //Primera opcion que aparece en la lista desplegable y seleccionada
+        <div class="field-block">
+            <label for="edit-categoria">Categoria</label>
+            <select id="edit-categoria" formControlName="categoria">
+                <option value="" disabled>Seleccione una categoria...</option>
 
-            @for (item of categorias; track $index) {
-                <option [value]="item"> {{ item.replaceAll("_", ' ') }}</option>
-            }
-            
+                @for (item of categorias; track $index) {
+                    <option [value]="item"> {{ item.replaceAll("_", ' ') }}</option>
+                }
             </select>
         </div>
 
-        <div>
-            <label for="">Unidad de Medida</label>
+        <div class="field-block">
+            <label for="edit-unidad">Unidad de Medida</label>
 
-            <select id="unidadMedida" formControlName = "unidadMedida">
-            <option value="" disabled selected>Seleccione una unidad de medida</option>
+            <select id="edit-unidad" formControlName="unidadMedida">
+                <option value="" disabled>Seleccione una unidad de medida</option>
 
-            @for (item of unidades; track $index) {
-                <option [value]="item"> {{ item.replaceAll('_', ' ') }}</option>
-            }
+                @for (item of unidades; track $index) {
+                    <option [value]="item"> {{ item.replaceAll('_', ' ') }}</option>
+                }
             </select>
         </div>
 
-        <div>
-            
-            <button (click)="save()" [disabled]="formulario.invalid">Guardar cambios</button>
-            <button (click)="cancel()">Cancelar</button>
-
-
+        <div class="form-actions">
+            <button type="button" class="btn-back" (click)="cancel()">Cancelar</button>
+            <button type="submit" [disabled]="formulario.invalid">Guardar cambios</button>
         </div>
     </form>
 </section>

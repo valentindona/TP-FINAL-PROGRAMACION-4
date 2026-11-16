@@ -1,48 +1,261 @@
-* {
+/* ==========================================================================
+   Banco de Alimentos · Gestor Global Solidario
+   Hoja de estilos base: tipografía, tokens, controles y utilidades.
+   ========================================================================== */
+
+@font-face {
+    font-family: 'Plex';
+    src: url('/fonts/ibm-plex-sans-latin.woff2') format('woff2');
+    font-weight: 400 700;
+    font-style: normal;
+    font-display: swap;
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+    font-family: 'Plex';
+    src: url('/fonts/ibm-plex-sans-latin-ext.woff2') format('woff2');
+    font-weight: 400 700;
+    font-style: normal;
+    font-display: swap;
+    unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+:root {
+    /* Paleta original del proyecto */
+    --ink: #17252A;
+    --ink-soft: #334155;
+    --muted: #64748b;
+    --muted-2: #94a3b8;
+    --line: #e2e8f0;
+    --line-strong: #cbd5e1;
+    --surface: #FEFFFF;
+    --canvas: #F4F9F9;
+    --canvas-2: #E9F3F2;
+    --brand: #2B7A78;
+    --brand-deep: #1E5D5B;
+    --brand-bright: #3AAFA9;
+    --brand-soft: #E4F3F2;
+    --night: #2B2D42;
+
+    /* Estados */
+    --ok: #10b981;
+    --ok-ink: #065f46;
+    --ok-soft: #d1fae5;
+    --warn: #f59e0b;
+    --warn-ink: #92400e;
+    --warn-soft: #fef3c7;
+    --danger: #ef4444;
+    --danger-ink: #991b1b;
+    --danger-soft: #fee2e2;
+    --info: #0ea5e9;
+    --info-ink: #0369a1;
+    --info-soft: #e0f2fe;
+
+    /* Forma y profundidad */
+    --r-sm: 8px;
+    --r-md: 12px;
+    --r-lg: 18px;
+    --r-xl: 26px;
+    --shadow-xs: 0 1px 2px rgba(23, 37, 42, 0.06);
+    --shadow-sm: 0 2px 8px rgba(23, 37, 42, 0.06);
+    --shadow-md: 0 12px 28px -14px rgba(23, 37, 42, 0.28);
+    --shadow-lg: 0 28px 64px -28px rgba(23, 37, 42, 0.35);
+    --ring: 0 0 0 3px rgba(58, 175, 169, 0.3);
+
+    /* Movimiento */
+    --ease: cubic-bezier(0.22, 0.68, 0.24, 1);
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --dur-1: 120ms;
+    --dur-2: 220ms;
+    --dur-3: 380ms;
+
+    /* Medidas del armazón */
+    --header-h: 68px;
+    --content-max: 1120px;
+}
+
+*,
+*::before,
+*::after {
     box-sizing: border-box;
     padding: 0;
     margin: 0;
 }
 
+html {
+    -webkit-text-size-adjust: 100%;
+}
+
 body {
     min-width: 320px;
     min-height: 100vh;
-    background: #F4F9F9;
-    color: #17252A;
-    font-family: Arial, Helvetica, sans-serif;
+    background: var(--canvas);
+    color: var(--ink);
+    font-family: 'Plex', 'Segoe UI', system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.55;
+    font-variant-numeric: tabular-nums;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
 }
+
+h1, h2, h3, h4 {
+    color: var(--ink);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.012em;
+    text-wrap: balance;
+}
+
+p {
+    text-wrap: pretty;
+}
+
+a {
+    color: var(--brand);
+}
+
+img,
+svg {
+    display: block;
+    max-width: 100%;
+}
+
+::selection {
+    background: rgba(58, 175, 169, 0.28);
+    color: var(--ink);
+}
+
+:focus-visible {
+    outline: 2px solid var(--brand-bright);
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+/* Scrollbar discreta, acorde al sistema interno */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--line-strong) transparent;
+}
+
+*::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+*::-webkit-scrollbar-thumb {
+    border: 3px solid transparent;
+    border-radius: 999px;
+    background: var(--line-strong);
+    background-clip: content-box;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+    background: var(--muted-2);
+    background-clip: content-box;
+}
+
+/* --------------------------------------------------------------------------
+   Controles base
+   -------------------------------------------------------------------------- */
 
 button,
 input,
 select,
 textarea {
     font: inherit;
+    color: inherit;
+}
+
+input:not([type='checkbox']):not([type='radio']):not([type='range']),
+select,
+textarea {
+    width: 100%;
+    padding: 11px 13px;
+    border: 1px solid var(--line-strong);
+    border-radius: 10px;
+    background: var(--surface);
+    color: var(--ink);
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color var(--dur-2) var(--ease), box-shadow var(--dur-2) var(--ease);
+}
+
+input:not([type='checkbox']):not([type='radio']):not([type='range']):hover,
+select:hover,
+textarea:hover {
+    border-color: var(--muted-2);
+}
+
+input:not([type='checkbox']):not([type='radio']):not([type='range']):focus,
+select:focus,
+textarea:focus {
+    border-color: var(--brand-bright);
+    box-shadow: var(--ring);
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: var(--muted-2);
+}
+
+select {
+    appearance: none;
+    padding-right: 34px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    cursor: pointer;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 88px;
+}
+
+label {
+    color: var(--ink);
+    font-size: 0.9rem;
+    font-weight: 500;
 }
 
 button:not([class]) {
-    padding: 10px 16px;
+    padding: 10px 18px;
     border: 0;
-    border-radius: 8px;
-    background: #2B7A78;
-    color: #FEFFFF;
+    border-radius: 10px;
+    background: var(--brand);
+    color: var(--surface);
     cursor: pointer;
-    font-weight: 500;
-    transition: background-color 0.2s ease, transform 0.1s ease;
+    font-weight: 600;
+    transition: background-color var(--dur-2) var(--ease), transform var(--dur-1) var(--ease), box-shadow var(--dur-2) var(--ease);
 }
 
 button:not([class]):hover:not(:disabled) {
+    background: var(--brand-bright);
+    box-shadow: var(--shadow-sm);
     transform: translateY(-1px);
-    background: #3AAFA9;
+}
+
+button:not([class]):active:not(:disabled) {
+    transform: translateY(1px);
+    box-shadow: none;
 }
 
 button:disabled {
     cursor: not-allowed;
     opacity: 0.55;
+    transform: none !important;
 }
+
+/* --------------------------------------------------------------------------
+   Mensajes
+   -------------------------------------------------------------------------- */
 
 body .container-form .error,
 body .error,
-body p.error {
+body p.error,
+small.error {
     display: block;
     margin: -2px 0 12px;
     color: #dc2626;
@@ -54,81 +267,23 @@ body .error-message {
     margin-top: 12px;
     padding: 12px 14px;
     border: 1px solid #fecaca;
-    border-radius: 8px;
+    border-left: 4px solid var(--danger);
+    border-radius: 10px;
     background: #fef2f2;
     color: #b91c1c;
     font-size: 0.9rem;
 }
 
-app-producto-create,
-app-producto-list,
-app-item-donacion-list,
-app-remito-create,
-app-remito-list {
-    display: block;
-    max-width: 1000px;
-    margin: 28px auto;
-    padding: 24px;
-    border: 1px solid #e2e8f0;
-    border-radius: 12px;
-    background: #FEFFFF;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
-}
+/* --------------------------------------------------------------------------
+   Utilidades compartidas por los módulos
+   -------------------------------------------------------------------------- */
 
-app-producto-create h2,
-app-producto-list h1,
-app-item-donacion-list h1,
-app-remito-create h2,
-app-remito-list h1 {
-    margin-bottom: 18px;
-    color: #17252A;
-    font-size: 1.5rem;
-    font-weight: 600;
-}
-
-app-producto-create form > div,
-app-remito-create form > div {
-    margin-bottom: 16px;
-}
-
-app-producto-create label,
-app-remito-create label,
-app-producto-list label,
-app-item-donacion-list label {
-    display: block;
-    margin-bottom: 8px;
-    color: #17252A;
-    font-size: 0.95rem;
-    font-weight: 500;
-}
-
-app-producto-create input,
-app-producto-create select,
-app-remito-create input,
-app-remito-create select,
-app-producto-list input,
-app-producto-list select,
-app-item-donacion-list input {
-    width: 100%;
-    min-height: 42px;
-    padding: 10px 12px;
-    border: 1px solid #cbd5e1;
-    border-radius: 8px;
-    outline: none;
-    background: #FEFFFF;
-    color: #17252A;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-app-producto-create input:focus,
-app-producto-create select:focus,
-app-remito-create input:focus,
-app-remito-create select:focus,
-app-producto-list input:focus,
-app-producto-list select:focus,
-app-item-donacion-list input:focus {
-    border-color: #2B7A78;
-    box-shadow: 0 0 0 3px rgba(43, 122, 120, 0.15);
+.eyebrow {
+    color: var(--brand);
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
 }
 
 .section-heading {
@@ -139,61 +294,1056 @@ app-item-donacion-list input:focus {
     margin-bottom: 18px;
 }
 
+.section-heading h1,
+.section-heading h2 {
+    margin: 0;
+}
+
 .btn-create {
-    display: inline-block;
-    padding: 10px 16px;
-    border-radius: 8px;
-    background: #2B7A78;
-    color: #FEFFFF;
-    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    border: 0;
+    border-radius: 10px;
+    background: var(--brand);
+    color: var(--surface);
+    font-size: 0.92rem;
+    font-weight: 600;
     text-decoration: none;
-    transition: background-color 0.2s ease;
+    box-shadow: 0 2px 6px rgba(43, 122, 120, 0.22);
+    transition: background-color var(--dur-2) var(--ease), transform var(--dur-1) var(--ease), box-shadow var(--dur-2) var(--ease);
+}
+
+.btn-create::before {
+    content: '+';
+    font-size: 1.05rem;
+    font-weight: 700;
+    line-height: 1;
 }
 
 .btn-create:hover {
-    background: #3AAFA9;
+    background: var(--brand-bright);
+    box-shadow: 0 6px 16px rgba(43, 122, 120, 0.26);
+    transform: translateY(-1px);
 }
 
-app-producto-list ul,
-app-item-donacion-list ul,
-app-remito-list ul {
-    display: grid;
+.btn-create:active {
+    transform: translateY(1px);
+    box-shadow: none;
+}
+
+.head-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
     gap: 10px;
-    margin-top: 16px;
+}
+
+.count-chip {
+    padding: 6px 12px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--surface);
+    color: var(--muted);
+    font-size: 0.74rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+}
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: var(--line);
+    color: #475569;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.badge::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: 0.7;
+}
+
+.badge.confirmada,
+.badge.al_dia,
+.badge.pagado {
+    background: var(--ok-soft);
+    color: var(--ok-ink);
+}
+
+.badge.pendiente {
+    background: var(--warn-soft);
+    color: var(--warn-ink);
+}
+
+.badge.cancelada,
+.badge.deudor {
+    background: var(--danger-soft);
+    color: var(--danger-ink);
+}
+
+.badge.excepcional {
+    background: var(--info-soft);
+    color: var(--info-ink);
+}
+
+.empty-state {
+    padding: 26px 20px;
+    border: 1px dashed var(--line-strong);
+    border-radius: var(--r-md);
+    background: var(--surface);
+    color: var(--muted);
+    font-size: 0.92rem;
+    text-align: center;
+}
+
+/* --------------------------------------------------------------------------
+   Módulos internos · estructura compartida
+   Todas las pantallas de listado, formulario y detalle usan estos bloques,
+   así el sistema se siente consistente sin duplicar estilos en cada página.
+   -------------------------------------------------------------------------- */
+
+/* --- Página de listado --------------------------------------------------- */
+
+.container-lista {
+    width: 100%;
+    max-width: var(--content-max);
+    margin: 0 auto;
+    padding: 32px 20px 58px;
+}
+
+.encabezado {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 14px 20px;
+    padding-bottom: 18px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--line);
+}
+
+.encabezado h1 {
+    color: var(--ink);
+    font-size: clamp(1.5rem, 2.8vw, 1.95rem);
+    font-weight: 600;
+    letter-spacing: -0.028em;
+}
+
+.encabezado .eyebrow {
+    margin-bottom: 7px;
+}
+
+.encabezado > div > p:not(.eyebrow) {
+    max-width: 58ch;
+    margin-top: 6px;
+    color: var(--muted);
+    font-size: 0.88rem;
+}
+
+/* Barra de búsqueda con icono */
+
+.barra-busqueda {
+    margin-bottom: 18px;
+}
+
+.barra-busqueda input {
+    height: 48px;
+    padding-left: 44px;
+    border-radius: var(--r-md);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='17' height='17' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m20 20-3.5-3.5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: 15px center;
+    background-size: 17px;
+}
+
+/* Filtros en línea (productos, ítems, remitos) */
+
+.toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding: 16px;
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+    background: var(--surface);
+    box-shadow: var(--shadow-xs);
+}
+
+.field-inline {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    flex: 1 1 210px;
+    min-width: 0;
+}
+
+.field-inline label {
+    color: var(--muted);
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.field-inline:has(> button) {
+    flex-direction: row;
+    align-items: flex-end;
+}
+
+.inline-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.inline-controls input,
+.inline-controls select {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.inline-controls button {
+    flex-shrink: 0;
+    height: 42px;
+}
+
+.field-inline > button {
+    height: 44px;
+    flex-shrink: 0;
+}
+
+/* --- Grilla y tarjetas de listado --------------------------------------- */
+
+.list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 14px;
+}
+
+.list > p:only-child {
+    grid-column: 1 / -1;
+    padding: 28px 20px;
+    border: 1px dashed var(--line-strong);
+    border-radius: var(--r-md);
+    background: var(--surface);
+    color: var(--muted);
+    font-size: 0.92rem;
+    text-align: center;
+}
+
+.item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 18px 20px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--surface);
+    box-shadow: var(--shadow-xs);
+    transition: border-color var(--dur-2) var(--ease), box-shadow var(--dur-2) var(--ease), transform var(--dur-2) var(--ease);
+}
+
+.item::before {
+    content: '';
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 3px;
+    background: var(--brand-bright);
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform var(--dur-2) var(--ease);
+}
+
+.item:hover {
+    border-color: #c9e2e0;
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+
+.item:hover::before {
+    transform: scaleY(1);
+}
+
+.item .data {
+    display: grid;
+    gap: 3px;
+    min-width: 0;
+}
+
+.item .data h2 {
+    color: var(--ink);
+    font-size: 1.02rem;
+    font-weight: 600;
+    letter-spacing: -0.012em;
+    overflow-wrap: anywhere;
+}
+
+.item .data h3 {
+    color: var(--brand);
+    font-size: 0.73rem;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    overflow-wrap: anywhere;
+}
+
+.item .data p {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 5px;
+    color: var(--ink-soft);
+    font-size: 0.86rem;
+    line-height: 1.45;
+    overflow-wrap: anywhere;
+}
+
+.item .data p strong {
+    flex-shrink: 0;
+    min-width: 66px;
+    color: var(--muted);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+}
+
+.item .data p:has(.badge) {
+    margin-top: 9px;
+}
+
+/* Acciones de cada tarjeta */
+
+.btns {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-top: auto;
+    padding-top: 14px;
+    border-top: 1px solid var(--line);
+}
+
+.btns a,
+.btns button,
+.actions a,
+.actions button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 7px 13px;
+    border: 1px solid transparent;
+    border-radius: 9px;
+    font-size: 0.79rem;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color var(--dur-2) var(--ease), border-color var(--dur-2) var(--ease), color var(--dur-2) var(--ease), transform var(--dur-1) var(--ease);
+}
+
+.btns a:active,
+.btns button:active,
+.actions a:active,
+.actions button:active {
+    transform: translateY(1px);
+}
+
+.btn-details {
+    background: var(--brand-soft);
+    color: var(--brand-deep);
+}
+
+.btn-details:hover {
+    background: #d5ecea;
+}
+
+.btn-edit {
+    border-color: var(--line-strong);
+    background: var(--surface);
+    color: var(--brand);
+}
+
+.btn-edit:hover {
+    border-color: var(--brand-bright);
+    background: var(--brand-soft);
+}
+
+.btn-delete {
+    background: var(--danger-soft);
+    color: var(--danger-ink);
+}
+
+.btn-delete:hover {
+    background: #fecaca;
+}
+
+.btn-back {
+    background: var(--canvas-2);
+    color: var(--ink-soft);
+}
+
+.btn-back:hover {
+    background: var(--line);
+}
+
+.btn-confirm {
+    background: var(--ok-soft);
+    color: var(--ok-ink);
+}
+
+.btn-confirm:hover {
+    background: #a7f3d0;
+}
+
+/* Resultado puntual de una búsqueda por ID */
+
+.lookup-result {
+    display: grid;
+    gap: 4px;
+    margin-bottom: 18px;
+    padding: 16px 18px;
+    border: 1px solid #bfe0dd;
+    border-left: 4px solid var(--brand-bright);
+    border-radius: var(--r-md);
+    background: var(--brand-soft);
+}
+
+.lookup-result h3 {
+    color: var(--brand-deep);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.lookup-result p {
+    color: var(--ink-soft);
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+/* --- Página de formulario ----------------------------------------------- */
+
+.container-form {
+    width: 100%;
+    max-width: 700px;
+    margin: 32px auto 58px;
+    padding: 30px 32px 32px;
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    background: var(--surface);
+    box-shadow: var(--shadow-sm);
+}
+
+.container-form > h1,
+.container-form > h2 {
+    padding-bottom: 16px;
+    margin-bottom: 4px;
+    border-bottom: 1px solid var(--line);
+    color: var(--ink);
+    font-size: 1.45rem;
+    font-weight: 600;
+    letter-spacing: -0.022em;
+}
+
+.container-form > .eyebrow {
+    margin-bottom: 8px;
+}
+
+.container-form form {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 12px;
+    margin-top: 20px;
+}
+
+.container-form form > label,
+.container-form form > input,
+.container-form form > select,
+.container-form form > textarea,
+.container-form form > .error,
+.container-form form > p.error,
+.container-form form > small.error,
+.container-form form > div {
+    flex: 1 1 100%;
+    min-width: 0;
+}
+
+.container-form form > label {
+    margin-top: 12px;
+    color: var(--ink);
+    font-size: 0.86rem;
+    font-weight: 600;
+}
+
+.container-form form > label:first-child {
+    margin-top: 0;
+}
+
+.container-form form > .error,
+.container-form form > p.error,
+.container-form form > small.error {
+    margin: -2px 0 0;
+}
+
+.container-form form > button,
+.container-form form > a {
+    margin-top: 20px;
+    flex: 0 0 auto;
+}
+
+.container-form form > button {
+    padding: 11px 22px;
+}
+
+.container-form form > a {
+    display: inline-flex;
+    align-items: center;
+    padding: 11px 18px;
+    border: 1px solid var(--line-strong);
+    border-radius: 10px;
+    color: var(--ink-soft);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color var(--dur-2) var(--ease), border-color var(--dur-2) var(--ease);
+}
+
+.container-form form > a:hover {
+    border-color: var(--muted-2);
+    background: var(--canvas);
+}
+
+/* --- Página de detalle --------------------------------------------------- */
+
+.container-details {
+    width: 100%;
+    max-width: 720px;
+    margin: 32px auto 58px;
+    padding: 30px 32px 32px;
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    background: var(--surface);
+    box-shadow: var(--shadow-sm);
+}
+
+.container-details article {
+    display: grid;
+    gap: 0;
+    margin-bottom: 24px;
+}
+
+.container-details article > h1,
+.container-details article > h2 {
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--line);
+    color: var(--ink);
+    font-size: 1.4rem;
+    font-weight: 600;
+    letter-spacing: -0.022em;
+}
+
+.container-details article > h3 {
+    margin: 26px 0 12px;
+    color: var(--ink);
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.container-details article p {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 18px;
+    padding: 11px 2px;
+    border-bottom: 1px dashed var(--line);
+    color: var(--ink-soft);
+    font-size: 0.92rem;
+    overflow-wrap: anywhere;
+}
+
+.container-details article p:last-child {
+    border-bottom: 0;
+}
+
+.container-details article p strong {
+    flex-shrink: 0;
+    color: var(--muted);
+    font-size: 0.79rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+}
+
+/* Cabecera de una ficha de detalle */
+
+.detail-head {
+    padding-bottom: 18px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--line);
+}
+
+.detail-head .eyebrow {
+    margin-bottom: 7px;
+}
+
+.detail-head h1 {
+    color: var(--ink);
+    font-size: clamp(1.4rem, 2.7vw, 1.8rem);
+    font-weight: 600;
+    letter-spacing: -0.026em;
+}
+
+.detail-sub {
+    margin-top: 7px;
+    color: var(--muted);
+    font-size: 0.87rem;
+}
+
+.detail-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 9px;
+    padding-top: 22px;
+    border-top: 1px solid var(--line);
+}
+
+.actions a,
+.actions button {
+    padding: 10px 18px;
+    font-size: 0.85rem;
+}
+
+/* --- Editor embebido dentro de un listado -------------------------------- */
+
+.editor-panel {
+    margin-top: 26px;
+    padding: 24px 26px 26px;
+    border: 1px solid var(--line);
+    border-top: 3px solid var(--brand-bright);
+    border-radius: var(--r-md);
+    background: var(--surface);
+    box-shadow: var(--shadow-sm);
+    animation: page-in 260ms var(--ease-out) both;
+}
+
+.editor-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px 16px;
+    padding-bottom: 14px;
+    margin-bottom: 18px;
+    border-bottom: 1px solid var(--line);
+}
+
+.editor-head .eyebrow {
+    margin-bottom: 6px;
+}
+
+.editor-head h2 {
+    color: var(--ink);
+    font-size: 1.15rem;
+    font-weight: 600;
+    letter-spacing: -0.018em;
+}
+
+/* Grilla de campos para formularios y editores */
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    align-items: start;
+    gap: 14px 16px;
+}
+
+.container-form form.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    align-items: start;
+    gap: 14px 16px;
+}
+
+.form-grid > .full,
+.container-form form.form-grid > .full {
+    grid-column: 1 / -1;
+}
+
+.field-block {
+    display: grid;
+    gap: 7px;
+    min-width: 0;
+}
+
+.form-grid > .field-block,
+.container-form form.form-grid > .field-block {
+    flex: none;
+}
+
+.field-block > label {
+    color: var(--ink);
+    font-size: 0.84rem;
+    font-weight: 600;
+}
+
+.form-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 9px;
+    grid-column: 1 / -1;
+    margin-top: 8px;
+    padding-top: 18px;
+    border-top: 1px solid var(--line);
+}
+
+.form-actions > a {
+    padding: 10px 18px;
+    border: 1px solid var(--line-strong);
+    border-radius: 10px;
+    background: var(--surface);
+    color: var(--ink-soft);
+    font-size: 0.88rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color var(--dur-2) var(--ease), border-color var(--dur-2) var(--ease);
+}
+
+.form-actions > a:hover {
+    border-color: var(--muted-2);
+    background: var(--canvas);
+}
+
+/* Autocompletado de donantes */
+
+.autocomplete {
+    display: grid;
+    gap: 2px;
+    max-height: 214px;
+    margin-top: 2px;
+    padding: 5px;
+    overflow-y: auto;
+    border: 1px solid var(--line-strong);
+    border-radius: 10px;
+    background: var(--surface);
+    box-shadow: var(--shadow-md);
     list-style: none;
 }
 
-app-producto-list li,
-app-item-donacion-list li,
-app-remito-list li {
+.autocomplete li {
     display: flex;
+    align-items: baseline;
     justify-content: space-between;
-    align-items: center;
     gap: 12px;
-    padding: 14px;
-    border: 1px solid #e2e8f0;
-    border-left: 4px solid #2B7A78;
-    border-radius: 8px;
-    background: #FEFFFF;
-    color: #334155;
+    padding: 8px 11px;
+    border-radius: 7px;
+    color: var(--ink-soft);
+    font-size: 0.88rem;
+    cursor: pointer;
+    transition: background-color var(--dur-1) var(--ease), color var(--dur-1) var(--ease);
 }
 
-@media (max-width: 600px) {
-    app-producto-create,
-    app-producto-list,
-    app-item-donacion-list,
-    app-remito-create,
-    app-remito-list {
-        margin: 18px 12px;
-        padding: 18px;
+.autocomplete li:hover {
+    background: var(--brand-soft);
+    color: var(--brand-deep);
+}
+
+.autocomplete li strong {
+    font-weight: 600;
+    overflow-wrap: anywhere;
+}
+
+.autocomplete li span {
+    flex-shrink: 0;
+    color: var(--muted);
+    font-size: 0.76rem;
+}
+
+.hint-ok {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--ok-ink);
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+/* Detalle de ítems dentro de una tarjeta */
+
+.detail-list {
+    display: grid;
+    gap: 6px;
+    margin-top: 8px;
+    list-style: none;
+}
+
+.detail-list li {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 8px 12px;
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    background: var(--canvas);
+    color: var(--ink-soft);
+    font-size: 0.84rem;
+}
+
+.detail-list li span:last-child {
+    flex-shrink: 0;
+    color: var(--muted);
+    font-size: 0.79rem;
+    font-weight: 600;
+}
+
+/* Constructor de ítems (remitos) */
+
+.items-builder {
+    display: grid;
+    gap: 12px;
+    margin-top: 4px;
+    padding-top: 18px;
+    border-top: 1px dashed var(--line-strong);
+}
+
+.items-builder h3 {
+    color: var(--ink);
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.items-builder .builder-hint {
+    margin-top: 3px;
+    color: var(--muted);
+    font-size: 0.82rem;
+}
+
+.items-container {
+    display: grid;
+    gap: 10px;
+}
+
+.item-row {
+    display: grid;
+    grid-template-columns: minmax(0, 2.2fr) minmax(0, 1fr) auto;
+    align-items: end;
+    gap: 12px;
+    padding: 14px 16px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--canvas);
+}
+
+.btn-add {
+    justify-self: start;
+    padding: 8px 15px;
+    border: 1px solid var(--brand);
+    border-radius: 9px;
+    background: var(--brand-soft);
+    color: var(--brand-deep);
+    cursor: pointer;
+    font-size: 0.82rem;
+    font-weight: 700;
+    transition: background-color var(--dur-2) var(--ease), transform var(--dur-1) var(--ease);
+}
+
+.btn-add:hover {
+    background: #d5ecea;
+}
+
+.btn-add:active {
+    transform: translateY(1px);
+}
+
+.btn-remove {
+    display: grid;
+    place-items: center;
+    height: 42px;
+    padding: 0 14px;
+    border: 1px solid #f5c2c2;
+    border-radius: 9px;
+    background: var(--danger-soft);
+    color: var(--danger-ink);
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 700;
+    transition: background-color var(--dur-2) var(--ease);
+}
+
+.btn-remove:hover:not(:disabled) {
+    background: #fecaca;
+}
+
+/* --- Adaptación a pantallas chicas -------------------------------------- */
+
+@media (max-width: 760px) {
+    .container-lista {
+        padding: 24px 16px 44px;
     }
 
-    .section-heading,
-    app-producto-list li,
-    app-item-donacion-list li,
-    app-remito-list li {
-        align-items: stretch;
+    .container-form,
+    .container-details {
+        margin: 20px 14px 40px;
+        padding: 22px 20px 26px;
+    }
+
+    .list {
+        grid-template-columns: 1fr;
+    }
+
+    .encabezado {
+        align-items: flex-start;
         flex-direction: column;
     }
+
+    .btns a,
+    .btns button {
+        flex: 1 1 auto;
+    }
+
+    .item-row {
+        grid-template-columns: 1fr;
+    }
+
+    .btn-remove {
+        width: 100%;
+    }
 }
 
+@media (max-width: 520px) {
+    .container-form form > button,
+    .container-form form > a,
+    .actions a,
+    .actions button {
+        flex: 1 1 100%;
+    }
+
+    .form-actions > button,
+    .form-actions > a {
+        flex: 1 1 100%;
+        justify-content: center;
+    }
+
+    .item .data p strong {
+        min-width: 0;
+    }
+}
+
+/* --------------------------------------------------------------------------
+   Entrada de cada vista ruteada.
+   Se anima sólo el host del componente activo: no toca el DOM interno de las
+   páginas ni interfiere con sus propias animaciones.
+   -------------------------------------------------------------------------- */
+
+#main > *:not(router-outlet) {
+    animation: page-in 380ms var(--ease-out) both;
+}
+
+@keyframes page-in {
+    from {
+        opacity: 0;
+        transform: translate3d(0, 12px, 0);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+/* --------------------------------------------------------------------------
+   Animaciones reutilizables
+   -------------------------------------------------------------------------- */
+
+@keyframes fade-up {
+    from {
+        opacity: 0;
+        transform: translate3d(0, 18px, 0);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes rise-in {
+    from {
+        opacity: 0;
+        transform: translate3d(0, 26px, 0) scale(0.985);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@keyframes hero-drift {
+    from {
+        opacity: 0;
+        transform: scale(1.08);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Aparición al hacer scroll: sólo si el navegador soporta scroll-driven
+   animations. Si no, el contenido queda visible normalmente. */
+@supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+        .reveal {
+            animation: fade-up linear both;
+            animation-timeline: view();
+            animation-range: entry 4% cover 26%;
+        }
+    }
+}
+
+/* --------------------------------------------------------------------------
+   Accesibilidad: menos movimiento
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+    }
+}

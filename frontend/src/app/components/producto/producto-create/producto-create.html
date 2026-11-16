@@ -1,64 +1,65 @@
-<h2>Crear Producto</h2>
+<div class="container-form">
+    <p class="eyebrow">Catálogo</p>
+    <h1>Crear producto</h1>
 
-<form [formGroup]="formulario" (ngSubmit)="add()">
-    <div>
-        <label for="">Nombre:</label>
-        <input type="text" formControlName = 'nombre'>
+    <form [formGroup]="formulario" (ngSubmit)="add()">
+        <div class="field-block">
+            <label for="nombre">Nombre</label>
+            <input id="nombre" type="text" formControlName="nombre">
 
-        @if (formulario.controls.nombre.invalid && formulario.controls.nombre.touched) {
-            
-            @if (formulario.controls.nombre.hasError('required')) {
+            @if (formulario.controls.nombre.invalid && formulario.controls.nombre.touched) {
+
+                @if (formulario.controls.nombre.hasError('required')) {
+                    <small class="error">Campo requerido</small>
+                }
+
+                @if (formulario.controls.nombre.hasError('minlength')) {
+                    <small class="error">El nombre debe tener al menos 3 caracteres.</small>
+                }
+
+                @if(formulario.controls.nombre.hasError('maxlength')){
+                    <small class="error">El nombre del producto no puede superar los 55 caracteres</small>
+                }
+            }
+        </div>
+
+        <div class="field-block">
+            <label for="categoria">Categoria</label>
+            <select id="categoria" formControlName="categoria">
+                <option value="" disabled selected>Seleccione una categoria...</option>
+
+                @for (item of categorias; track $index) {
+                    <option [value]="item"> {{ item.replaceAll("_", ' ') }}</option>
+                }
+
+            </select>
+
+            @if (formulario.controls.categoria.hasError('required') && formulario.controls.categoria.touched) {
                 <small class="error">Campo requerido</small>
             }
+        </div>
 
-            @if (formulario.controls.nombre.hasError('minlength')) {
-                <small class="error">El nombre debe tener al menos 3 caracteres.</small>
-            }
+        <div class="field-block">
+            <label for="unidadMedida">Unidad de Medida</label>
+            <select id="unidadMedida" formControlName="unidadMedida">
+                <option value="" disabled selected>Seleccione una unidad de medida</option>
 
-            @if(formulario.controls.nombre.hasError('maxlength')){
-                <small class="error">El nombre del producto no puede superar los 55 caracteres</small>
-            }
-        }
-    </div>
+                @for (item of unidades; track $index) {
+                    <option [value]="item"> {{ item.replaceAll('_', ' ') }}</option>
+                }
+            </select>
 
-    <div>
-        <label for="">Categoria</label>
-        <select id="categoria" formControlName = 'categoria'> <!--Crea la lista desplegable-->
-            <option value="" disabled selected>Seleccione una categoria...</option> <!--Primera opcion que aparece en la lista desplegable y seleccionada -->
-
-            @for (item of categorias; track $index) {
-                <option [value]="item"> {{ item.replaceAll("_", ' ') }}</option>
-            }
-            
-        </select>
-
-        @if (formulario.controls.categoria.hasError('required') && formulario.controls.categoria.touched) {
+            @if (formulario.controls.unidadMedida.hasError('required') && formulario.controls.unidadMedida.touched) {
                 <small class="error">Campo requerido</small>
-        }
-        
-    </div>
-
-    <div>
-        <label for="">Unidad de Medida</label>
-
-        <select id="unidadMedida" formControlName = "unidadMedida">
-            <option value="" disabled selected>Seleccione una unidad de medida</option>
-
-            @for (item of unidades; track $index) {
-                <option [value]="item"> {{ item.replaceAll('_', ' ') }}</option>
             }
+        </div>
 
-        </select>
+        <div class="form-actions">
+            <button type="submit" [disabled]="this.formulario.invalid">Crear Producto</button>
+        </div>
 
-        @if (formulario.controls.unidadMedida.hasError('required') && formulario.controls.unidadMedida.touched) {
-            <small class="error">Campo requerido</small>
+        @if (productoService.error(); as mensajeError) {
+            <p class="error-message">{{ mensajeError }}</p>
         }
-    </div>
-
-    <div>
-        <button type="submit" [disabled]="this.formulario.invalid">Crear Producto</button>
-    </div>
-    @if (productoService.error(); as mensajeError) {
-        <p class="error-message">{{ mensajeError }}</p>
-    }
-</form>
+    </form>
+</div>

@@ -1,7 +1,13 @@
 <div class="container-details">
 
     @if(empresa){
-        
+
+        <header class="detail-head">
+            <p class="eyebrow">Empresa donante</p>
+            <h1>{{ empresa.razon_social }}</h1>
+            <p class="detail-sub">CUIT {{ empresa.cuit }}</p>
+        </header>
+
         <article>
             <p><strong>ID:</strong> {{ empresa.id }}</p>
             <p><strong>Razón Social:</strong> {{ empresa.razon_social }}</p>
@@ -19,7 +25,7 @@
         </div>
 
     }@else{
-        <p>No hay empresa cargada con el ID ingresado</p>
+        <p class="empty-state">No hay empresa cargada con el ID ingresado</p>
     }
 
 </div>

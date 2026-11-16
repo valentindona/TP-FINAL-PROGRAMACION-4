@@ -1,11 +1,18 @@
 <div class="container-lista">
-        
-    <div class="encabezado">
-        <h1>Gestión de instituciones</h1>
 
-        @if (puedeCrear) {
-            <a routerLink="/instituciones/form" class="btn-create"> Nueva institución </a>
-        }
+    <div class="encabezado">
+        <div>
+            <p class="eyebrow">Instituciones</p>
+            <h1>Gestión de instituciones</h1>
+            <p>Entidades beneficiarias, contacto y estado de pago.</p>
+        </div>
+
+        <div class="head-actions">
+            <span class="count-chip">{{ institucionesFiltradas.length }} registros</span>
+            @if (puedeCrear) {
+                <a routerLink="/instituciones/form" class="btn-create"> Nueva institución </a>
+            }
+        </div>
     </div>
 
     <div class="barra-busqueda">
@@ -22,7 +29,10 @@
                     <p><strong>Tel:</strong> {{data.telefono}}</p>
                     <p><strong>Email:</strong> {{data.email}}</p>
                     <p><strong>Dirección:</strong> {{data.direccion}}</p>
-                    <p><strong>Estado:</strong> {{data.estadoPago}}</p>
+                    <p>
+                        <strong>Estado:</strong>
+                        <span class="badge" [ngClass]="data.estadoPago?.toLowerCase()">{{data.estadoPago}}</span>
+                    </p>
                 </div>
 
                 <div class="btns">

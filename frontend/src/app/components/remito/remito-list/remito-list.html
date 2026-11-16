@@ -1,31 +1,30 @@
-<section>
+<section class="container-lista">
 
-    <div class="section-heading">
-        <h1>Listado de remitos</h1>
-        <a routerLink="/remitos/crear" class="btn-create">Crear remito</a>
+    <div class="encabezado">
+        <div>
+            <p class="eyebrow">Depósito · Entregas</p>
+            <h1>Remitos</h1>
+            <p>Entregas emitidas a instituciones, con el detalle de sus ítems.</p>
+        </div>
+
+        <div class="head-actions">
+            <span class="count-chip">{{ remitoService.remitos().length }} registros</span>
+            <a routerLink="/remitos/crear" class="btn-create">Crear remito</a>
+        </div>
     </div>
 
-    <ul class="remito-list">
+    <div class="list">
         @for (item of remitoService.remitos(); track $index) {
-            <li class="remito-item">
-                <div class="remito-header">
-                    <div class="remito-title-group">
-                        <strong>Remito N° {{ item.id }}</strong>
-                        <span>{{ item.fecha | date:'dd/MM/yyyy' }}</span>
-                    </div>
+            <article class="item">
 
-                    <div class="remito-actions">
-                        <button class="btn-edit" (click)="editar(item)">Editar</button>
-                        <button class="btn-delete" (click)="eliminar(item.id)">Eliminar</button>
-                    </div>
-                </div>
-
-                <div class="remito-body">
+                <div class="data">
+                    <h2>Remito N° {{ item.id }}</h2>
+                    <h3>{{ item.fecha | date:'dd/MM/yyyy' }}</h3>
                     <p><strong>Institución:</strong> {{ item.institucionNombre || 'Institución sin nombre' }}</p>
                     <p><strong>Items:</strong> {{ item.items?.length ?? 0 }}</p>
 
                     @if (item.items?.length) {
-                        <ul class="detalle-remito">
+                        <ul class="detail-list">
                             @for (detalle of item.items; track detalle.idItemDonacion) {
                                 <li>
                                     <span>{{ detalle.nombreProducto || 'Item sin nombre' }}</span>
@@ -35,9 +34,17 @@
                         </ul>
                     }
                 </div>
-            </li>
+
+                <div class="btns">
+                    <button class="btn-edit" (click)="editar(item)">Editar</button>
+                    <button class="btn-delete" (click)="eliminar(item.id)">Eliminar</button>
+                </div>
+
+            </article>
+        } @empty {
+            <p>No hay remitos emitidos</p>
         }
-    </ul>
+    </div>
 
     @if (remitoService.remitoByID(); as r) {
         <app-remito-edit></app-remito-edit>

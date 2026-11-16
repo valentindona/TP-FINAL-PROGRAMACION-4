@@ -1,7 +1,15 @@
 <div class="container-details">
 
     @if(institucion){
-        
+
+        <header class="detail-head">
+            <p class="eyebrow">Institución · {{ institucion.tipo }}</p>
+            <h1>{{ institucion.nombre }}</h1>
+            <div class="detail-chips">
+                <span [class]="'badge ' + (institucion.estadoPago || '').toLowerCase()">{{ institucion.estadoPago }}</span>
+            </div>
+        </header>
+
         <article>
             <p><strong>ID:</strong> {{ institucion.id }}</p>
             <p><strong>Nombre:</strong> {{ institucion.nombre }}</p>
@@ -9,7 +17,10 @@
             <p><strong>Dirección:</strong> {{ institucion.direccion }}</p>
             <p><strong>Teléfono:</strong> {{ institucion.telefono }}</p>
             <p><strong>Email:</strong> {{ institucion.email }}</p>
-            <p><strong>Estado:</strong> {{ institucion.estadoPago}}</p>
+            <p>
+                <strong>Estado:</strong>
+                <span [class]="'badge ' + (institucion.estadoPago || '').toLowerCase()">{{ institucion.estadoPago }}</span>
+            </p>
         </article>
 
         <div class="actions">
@@ -28,7 +39,7 @@
         </div>
 
     }@else{
-        <p>No hay institución cargada con el ID ingresado</p>
+        <p class="empty-state">No hay institución cargada con el ID ingresado</p>
     }
 
 </div>

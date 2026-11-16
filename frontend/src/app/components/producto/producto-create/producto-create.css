@@ -1,0 +1,28 @@
+/* La tarjeta del formulario viene de src/styles.css. */
+
+.container-form form > .field-block {
+    display: grid;
+    gap: 7px;
+    flex: 1 1 100%;
+}
+
+.container-form form > .field-block + .field-block {
+    margin-top: 14px;
+}
+
+.field-block label {
+    color: var(--ink);
+    font-size: 0.86rem;
+    font-weight: 600;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    flex: 1 1 100%;
+    margin-top: 22px;
+}
+
+.form-actions button {
+    padding: 11px 24px;
+}

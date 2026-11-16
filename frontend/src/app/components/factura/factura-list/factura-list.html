@@ -1,22 +1,28 @@
 <section class="container-lista factura-page">
+
     <div class="encabezado">
         <div>
-            <p class="eyebrow">Depósito</p>
+            <p class="eyebrow">Depósito · Comprobantes</p>
             <h1>Facturas</h1>
+            <p>Comprobantes asociados a las donaciones recibidas.</p>
         </div>
-        <button type="button" class="btn-back" (click)="mostrarTodas()">Restablecer filtros</button>
+
+        <div class="head-actions">
+            <span class="count-chip">{{ facturaService.facturas().length }} registros</span>
+            <button type="button" class="btn-back" (click)="mostrarTodas()">Restablecer filtros</button>
+        </div>
     </div>
 
-    <div class="factura-filters">
-        <div class="filter-field">
+    <div class="toolbar">
+        <div class="field-inline">
             <label for="buscarId">Buscar por ID</label>
-            <div class="filter-control">
+            <div class="inline-controls">
                 <input id="buscarId" type="number" min="1" [(ngModel)]="searchId" placeholder="ID de factura">
                 <button type="button" (click)="buscar()" [disabled]="!searchId || searchId < 1">Buscar</button>
             </div>
         </div>
 
-        <div class="filter-field">
+        <div class="field-inline">
             <label for="fechaDesde">Filtrar por fecha</label>
             <div class="date-range">
                 <input id="fechaDesde" type="date" [(ngModel)]="fechaDesde" aria-label="Fecha desde">
@@ -32,29 +38,31 @@
     }
 
     @if (facturaService.facturaById(); as factura) {
-        <article class="factura-result">
-            <h2>Factura #{{ factura.id }}</h2>
-            <p><strong>Donación:</strong> #{{ factura.idDonacion }}</p>
-            <p><strong>Fecha:</strong> {{ factura.fecha }}</p>
-            <p><strong>Tipo:</strong> {{ factura.tipo }}</p>
-            <p><strong>Donante:</strong> {{ factura.nombreDonante }}</p>
+        <article class="lookup-result">
+            <h3>Factura encontrada</h3>
+            <p>
+                Factura #{{ factura.id }} · Donación #{{ factura.idDonacion }} · {{ factura.fecha }} ·
+                {{ factura.tipo }} · {{ factura.nombreDonante }}
+            </p>
         </article>
     }
 
-    <div class="factura-list">
-        <h2>Listado de facturas</h2>
+    <div class="list">
         @for (factura of facturaService.facturas(); track factura.id) {
-            <article class="factura-row">
-                <div>
-                    <h3>Factura #{{ factura.id }}</h3>
-                    <p>Donación #{{ factura.idDonacion }} · {{ factura.tipo }} · {{ factura.nombreDonante }}</p>
+            <article class="item">
+                <div class="data">
+                    <h2>Factura #{{ factura.id }}</h2>
+                    <h3>{{ factura.tipo }}</h3>
+                    <p><strong>Donación:</strong> #{{ factura.idDonacion }}</p>
+                    <p><strong>Donante:</strong> {{ factura.nombreDonante }}</p>
+                    <p><strong>Fecha:</strong> {{ factura.fecha }}</p>
                 </div>
-                <time>{{ factura.fecha }}</time>
             </article>
         } @empty {
             @if (!facturaService.error()) {
-                <p class="empty-state">No hay facturas para mostrar.</p>
+                <p>No hay facturas para mostrar</p>
             }
         }
     </div>
+
 </section>
